@@ -1,0 +1,2 @@
+D:\PROJECTS\physic\x64\Release\physic.exe
+D:\PROJECTS\physic\Physical-simulation\x64\Release\physic.exe

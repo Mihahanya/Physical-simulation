@@ -1,0 +1,8 @@
+﻿  main.cpp
+D:\PROJECTS\physic\Physical-simulation\Physical.h(23,1): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+  Создание кода
+  126 of 131 functions (96.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  physic.vcxproj -> D:\PROJECTS\physic\Physical-simulation\x64\Release\physic.exe
