@@ -1,9 +1,10 @@
 ﻿  main.cpp
-D:\PROJECTS\Physical-simulation\h.h(22,13): warning C4244: return: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\Physical-simulation\h.h(20,13): warning C4244: return: преобразование "double" в "float", возможна потеря данных
 D:\PROJECTS\Physical-simulation\Wall.h(26,32): warning C4244: return: преобразование "int" в "float", возможна потеря данных
+D:\PROJECTS\Physical-simulation\Wall.h(34,32): warning C4244: return: преобразование "int" в "float", возможна потеря данных
 D:\PROJECTS\Physical-simulation\Physical.h(37,77): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
   Создание кода
-  1 of 316 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+  2 of 317 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено

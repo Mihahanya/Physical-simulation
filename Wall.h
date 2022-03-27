@@ -31,11 +31,11 @@ public:
 	}
 
 	float x_by_y(float y) {
-		//if (y > dy or y < uy) return ERR;
-		float vel = (end.x-beg.x) / (end.y-beg.y),
-				x = vel*y + beg.x;
-		//return (x < lx or x > rx) ? ERR : x;
-		return x;
+		if (y > dy or y < uy) return ERR;
+		float k = (end.x-beg.x) / (end.y-beg.y),
+			  b = beg.x - k*beg.y,
+			  x = k*y + b;
+		return (x < lx or x > rx) ? ERR : x;
 	}
 private:
 	float lx, rx, uy, dy;

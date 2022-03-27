@@ -12,10 +12,11 @@ int main()
 
     // Game objects
 
-    vec2 cntr = vec2(W/2-50, H-200);
-    const int cnt_of_sds = 5;
-    const float size = 30, mass = 1, elastic = 10;
+    vec2 cntr = vec2(W/2-50, 200);
+    const int cnt_of_sds = 50;
+    const float size = 30, mass = 1, elastic = 1;
     Physical fig(mass, elastic);
+
     fig.create_regular_polygon(cntr, cnt_of_sds, size);
 
     Wall wall(vec2(0, H-150), vec2(W, H));    fig.add_wall(wall);
@@ -29,7 +30,7 @@ int main()
     while (window.isOpen())
     {
         float delta_time = delta_clock.restart().asSeconds();
-        cout << "FPS: " << 1/delta_time << '\n';
+        cout << "FPS: " << round(1/delta_time * 10)/10 << "    \r";
 
         fig.step(delta_time);
 
@@ -44,9 +45,9 @@ int main()
         window.clear(Color::White);
         window.draw(c);
         fig.draw(window);
-#if VISION
-        fig.show_av(window);
-#endif
+
+        if (Keyboard::isKeyPressed(Keyboard::Q)) fig.show_av(window);
+
         wall.draw(window);
         wall2.draw(window);
         
