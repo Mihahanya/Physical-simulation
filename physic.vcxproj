@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClInclude Include="h.h" />
     <ClInclude Include="Physical.h" />
+    <ClInclude Include="PPoint.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
