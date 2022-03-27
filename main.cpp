@@ -1,31 +1,39 @@
 ﻿#include <iostream>
-#include <vector>
-#include <SFML/Graphics.hpp>
-#include "windows.h"
 
 #include "Physical.h"
-
-#define W 800
-#define H 600
+#include "Wall.h"
 
 int main()
 {
     RenderWindow window(VideoMode(W, H), "Physical Simulation");
+    window.setFramerateLimit(60);
+
     Clock delta_clock;
 
-    //
+    // Game objects
 
-    vec2 cntr = vec2(W/2, H/2);
-    const int cnt_of_sds = 6;
-    const float size = 30;
+    vec2 cntr = vec2(W/2-50, H-200);
+    const int cnt_of_sds = 5;
+    const float size = 30, mass = 1, elastic = 10;
+    Physical fig(mass, elastic);
+    fig.create_regular_polygon(cntr, cnt_of_sds, size);
 
-    Physical figr;
-    figr.create_regular_polygon(cntr, cnt_of_sds, size);
+    Wall wall(vec2(0, H-150), vec2(W, H));    fig.add_wall(wall);
+    Wall wall2(vec2(0, H), vec2(W, H-150));   fig.add_wall(wall2);
+
+    CircleShape c(2);
+    c.setFillColor(Color::Black);
+    
+    // Main cycle
 
     while (window.isOpen())
     {
-        Time delta_time = delta_clock.restart();
-        cout << delta_time.asSeconds() << '\n';
+        float delta_time = delta_clock.restart().asSeconds();
+        cout << "FPS: " << 1/delta_time << '\n';
+
+        fig.step(delta_time);
+
+        c.setPosition(fig.corners[0].x-2, wall.y_by_x(fig.corners[0].x)-2);
 
         //
 
@@ -33,11 +41,16 @@ int main()
         while (window.pollEvent(e))
             if (e.type == Event::Closed) window.close();
 
-        window.clear(Color(250, 250, 250));
-        figr.draw(window);
+        window.clear(Color::White);
+        window.draw(c);
+        fig.draw(window);
+#if VISION
+        fig.show_av(window);
+#endif
+        wall.draw(window);
+        wall2.draw(window);
+        
         window.display();
-
-        //Sleep(200);
     }
 
     return 0;
