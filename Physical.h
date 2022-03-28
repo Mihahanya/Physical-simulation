@@ -9,12 +9,14 @@ public:
     vector<PPoint> points;
     vector<vector<float>> arms;
     vector<Wall> walls;
-    float mass, elasticity, jumpling;
+    float mass, elasticity, jumpling, friction;
+    vec2 center;
 
-    Physical(float mass, float elasticity, float jumpling=1) {
+    Physical(float mass, float elasticity, float jumpling=1, float friction=1) {
         this->mass = mass;
         this->elasticity = elasticity;
         this->jumpling = jumpling;
+        this->friction = friction;
     }
 
     void create_regular_polygon(vec2 cntr, int cnt_of_sds, float size);
@@ -24,8 +26,11 @@ public:
 
     void draw(RenderWindow &window, Color color);
     void show_av(RenderWindow &window);
+    void show_dots(float r, RenderWindow &window);
 
-    void step(float delta_time);
+    void frame(float delta_time);
+    
+    void move(vec2 d);
 
 private:
     inline void take_arms();
@@ -52,29 +57,26 @@ void Physical::create_custom_polygon(vector<vec2> crnrs) {
 }
 
 // Simulation
-void Physical::step(float delta_time) {
+void Physical::frame(float delta_time) {
     vector<vec2> add_acc = stbl_vel();
+    center = zero;
     for (int i = 0; i < points.size(); i++) {
-        points[i].accel += add_acc[i];
-        
+        points[i].move(add_acc[i]);
         do_walls_collision(points[i]);
 
-        points[i].step(delta_time);
-        points[i].accel -= add_acc[i];
+        points[i].frame(delta_time);
+
+        center += points[i].pos;
     }
+    center /= (float)points.size();
 }
 
 inline void Physical::do_walls_collision(PPoint &point) {
     for (auto w : walls) {
         float h = w.y_by_x(point.pos.x);
         if (h != INT_MAX) {
-            if (point.pos.y > h and !w.upper) {
-                point.vel = reflect(point.vel, norm(vec2(1, -1/w.k))) * jumpling;
-                point.pos.y = h;
-                break;
-            }
-            else if (point.pos.y < h and w.upper) {
-                point.vel = reflect(point.vel, norm(vec2(1, -1/w.k))) * jumpling;
+            if ((point.pos.y > h and !w.upper) or (point.pos.y < h and w.upper)) {
+                point.vel = reflect(point.vel * jumpling, norm(vec2(1, -1/w.k))) ;
                 point.pos.y = h;
                 break;
             }
@@ -117,7 +119,7 @@ void Physical::draw(RenderWindow &window, Color color=Color::Black) {
 void Physical::show_av(RenderWindow &window) {
     for (int i = 0; i < points.size(); i++) {
         window.draw(easy_line(points[i].pos, points[i].pos+points[i].vel/G*30.f, Color(0, 0, 255, 120)), 2, LinesStrip);
-        window.draw(easy_line(points[i].pos, points[i].pos+points[i].force/G*10.f, Color::Red), 2, LinesStrip);
+        window.draw(easy_line(points[i].pos, points[i].pos+points[i].force/G, Color::Red), 2, LinesStrip);
 
         for (int i = 0; i < points.size(); i++) {
             for (int j = 0; j < points.size(); j++) {
@@ -126,6 +128,15 @@ void Physical::show_av(RenderWindow &window) {
             }
         }
     }
+}
+
+void Physical::show_dots(float r, RenderWindow &window) {
+    for (PPoint p : points) {
+        CircleShape c(r); c.setFillColor(Color::Black); c.setPosition(p.pos - vec2(r, r));
+        window.draw(c);
+    }
+    CircleShape c(r); c.setFillColor(Color::Black); c.setPosition(center - vec2(r, r));
+    window.draw(c);
 }
 
 // Taking arm connections
@@ -138,3 +149,10 @@ inline void Physical::take_arms() {
         arms.push_back(a);
     }
 }
+
+// Moving
+void Physical::move(vec2 d) {
+    for (PPoint &p : points)
+        p.move(d);
+}
+
