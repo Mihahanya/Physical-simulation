@@ -14,7 +14,7 @@ int main()
 
     vec2 cntr = vec2(W/2-50, 200);
     const int cnt_of_sds = 5;
-    const float size=30, mass=1, elastic=1000, jumpling=0.6, friction=1;
+    const float size=30, mass=1, elastic=50, jumpling=0.3, friction=1;
     Physical fig(mass, elastic, jumpling, friction);
 
     fig.create_regular_polygon(cntr, cnt_of_sds, size);

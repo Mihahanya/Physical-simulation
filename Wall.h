@@ -5,7 +5,7 @@ class Wall
 {
 public:
 	vec2 beg, end;
-	int ERR = INT32_MAX;
+	const int OUT = INT32_MAX;
 	bool upper;
 	float k, b;
 
@@ -27,10 +27,17 @@ public:
 	}
 
 	float y_by_x(float x) {
-		if (x < lx or x > rx) return ERR; 
-		float y = k*x + b; // y=xv v=y/x
-		return (y > dy or y < uy) ? ERR : y;
+		if (x < lx or x > rx) return OUT; 
+		float y = k*x + b;
+		return (y > dy or y < uy) ? OUT : y;
 	}
+
+	float x_by_y(float y) {
+		if (y > dy or y < uy) return OUT; 
+		float x = (y - b) / k;
+		return (x < lx or x > rx) ? OUT : x;
+	}
+
 private:
 	float lx, rx, uy, dy;
 };

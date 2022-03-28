@@ -1,5 +1,4 @@
 #pragma once
-
 #include "h.h"
 
 class PPoint

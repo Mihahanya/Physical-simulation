@@ -65,7 +65,6 @@ void Physical::frame(float delta_time) {
         do_walls_collision(points[i]);
 
         points[i].frame(delta_time);
-
         center += points[i].pos;
     }
     center /= (float)points.size();
@@ -77,7 +76,7 @@ inline void Physical::do_walls_collision(PPoint &point) {
         if (h != INT_MAX) {
             if ((point.pos.y > h and !w.upper) or (point.pos.y < h and w.upper)) {
                 point.vel = reflect(point.vel * jumpling, norm(vec2(1, -1/w.k))) ;
-                point.pos.y = h;
+                point.pos = vec2(w.x_by_y(h), h);
                 break;
             }
         }
@@ -92,14 +91,12 @@ inline vector<vec2> Physical::stbl_vel() {
         for (int j=0; j<points.size(); j++) {
             if (j == i) { m = 1; continue; }
 
-            float k = 1-arms[i][j-m] / dist(points[i].pos, points[j].pos);
-            add_ac += (points[j].pos-points[i].pos) * (float)pow(k, 1);
+            /*float k = 1-arms[i][j-m] / dist(points[i].pos, points[j].pos);
+            add_ac += (points[j].pos-points[i].pos) * (float)pow(k, 1);*/
 
-            /*vec2 n = points[j].pos-points[i].pos;
-            float a = dist(zero, n) - arms[i][j-m];
-            vec2 b = (points[j].vel-points[i].vel), norm(n);
-            add_ac += a + b;*/
+            add_ac += (points[j].pos-points[i].pos) * (dist(points[i].pos, points[j].pos)-arms[i][j-m]);
         }
+        //add_acc.push_back(add_ac*elasticity/(float)points.size());
         add_acc.push_back(add_ac*elasticity/(float)points.size());
     }
     return add_acc;
