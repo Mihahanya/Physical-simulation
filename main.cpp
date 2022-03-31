@@ -9,21 +9,27 @@ int main()
     window.setFramerateLimit(60);
 
     Clock delta_clock;
+    vec2 center = vec2(W/2, H/2);
 
     // Game objects
 
-    vec2 cntr = vec2(W/2-50, 200);
-    const int cnt_of_sds = 5;
-    const float size=30, mass=1, elastic=50, jumpling=0.3, friction=1;
+    vec2 cntr = vec2(W/2, 200);
+    int cnt_of_sds = 6;
+    float size=30, mass=1, elastic=100, jumpling=0.3, friction=1;
     Physical fig(mass, elastic, jumpling, friction);
 
     fig.create_regular_polygon(cntr, cnt_of_sds, size);
 
-    Wall wall(vec2(0, H-150), vec2(W/2, H-10));    fig.add_wall(wall);
-    Wall wall2(vec2(W/2, H-10), vec2(W, H-150));   fig.add_wall(wall2);
-    
-    Wall walll(vec2(0, 500), vec2(W/2, 0), true);   fig.add_wall(walll);
-    Wall wallr(vec2(W/2, 0), vec2(W, 500), true);   fig.add_wall(wallr);
+    // add walls
+
+    vector<vec2> ps = { vec2(10, H-200), vec2(W/2, 10), vec2(W-10, H-200), vec2(W/2, H-10), vec2(10, H-200) };
+
+    vector<Wall> walls;
+    for (int i=0; i<ps.size()-1; i++) {
+        Wall w(ps[i], ps[i+1], i==0 or i==1);
+        fig.add_wall(w);
+        walls.push_back(w);
+    }
     
     // Main cycle
 
@@ -51,14 +57,10 @@ int main()
         window.clear(Color::White);
 
         fig.draw(window);
-        fig.show_dots(2, window);
+        fig.show_dots(1, window);
         if (Keyboard::isKeyPressed(Keyboard::Q)) fig.show_av(window);
 
-        wall.draw(window);
-        wall2.draw(window);
-
-        walll.draw(window);
-        wallr.draw(window);
+        for (auto w : walls) w.draw(window);
         
         window.display();
     }

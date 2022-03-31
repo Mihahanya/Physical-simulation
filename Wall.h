@@ -7,7 +7,7 @@ public:
 	vec2 beg, end;
 	const int OUT = INT32_MAX;
 	bool upper;
-	float k, b;
+	float k, b, alpha;
 
 	Wall(vec2 begining, vec2 end, bool upper=false) {
 		beg = begining; this->end = end+vec2(1, 1);
@@ -18,6 +18,8 @@ public:
 
 		k = (end.y-beg.y) / (end.x-beg.x);
 		b = beg.y - k*beg.x;
+
+		alpha = atan(k);
 	}
 
 	void draw(RenderWindow &window, Color color=Color::Black) {

@@ -6,7 +6,7 @@
 #define PI 3.14159265
 
 #define W 800
-#define H 600
+#define H 800
 
 using namespace std; 
 using namespace sf;

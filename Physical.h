@@ -34,7 +34,7 @@ public:
 
 private:
     inline void take_arms();
-    inline vector<vec2> stbl_vel();
+    inline vector<vec2> form_shape();
     inline void do_walls_collision(PPoint &point);
 };
 
@@ -57,15 +57,17 @@ void Physical::create_custom_polygon(vector<vec2> crnrs) {
 }
 
 // Simulation
-void Physical::frame(float delta_time) {
-    vector<vec2> add_acc = stbl_vel();
+void Physical::frame(float dt) {
+    float delta_time = min(dt, 0.02f);
+    vector<vec2> frm = form_shape();
     center = zero;
     for (int i = 0; i < points.size(); i++) {
-        points[i].move(add_acc[i]);
-        do_walls_collision(points[i]);
+        points[i].move(frm[i]); // Regulate the shape
 
-        points[i].frame(delta_time);
+        points[i].frame(delta_time); // Make frame of current point
         center += points[i].pos;
+        
+        do_walls_collision(points[i]); // Check and make collisions
     }
     center /= (float)points.size();
 }
@@ -75,31 +77,31 @@ inline void Physical::do_walls_collision(PPoint &point) {
         float h = w.y_by_x(point.pos.x);
         if (h != INT_MAX) {
             if ((point.pos.y > h and !w.upper) or (point.pos.y < h and w.upper)) {
-                point.vel = reflect(point.vel * jumpling, norm(vec2(1, -1/w.k))) ;
-                point.pos = vec2(w.x_by_y(h), h);
+                vec2 r = reflect(point.vel * jumpling, norm(vec2(1, -1/w.k)));
+                if (dist(zero, r) > 1) {
+                    point.vel = r;
+                    point.pos = vec2(w.x_by_y(h), h);
+                }
                 break;
             }
         }
     }
 }
 
-inline vector<vec2> Physical::stbl_vel() {
-    vector<vec2> add_acc;
+inline vector<vec2> Physical::form_shape() {
+    vector<vec2> frm(points.size());
     for (int i = 0; i < points.size(); i++) {
-        vec2 add_ac = zero;
+        vec2 acc = zero;
         int m = 0;
-        for (int j=0; j<points.size(); j++) {
-            if (j == i) { m = 1; continue; }
-
-            /*float k = 1-arms[i][j-m] / dist(points[i].pos, points[j].pos);
-            add_ac += (points[j].pos-points[i].pos) * (float)pow(k, 1);*/
-
-            add_ac += (points[j].pos-points[i].pos) * (dist(points[i].pos, points[j].pos)-arms[i][j-m]);
+        for (int j = (i == 0 ? 0 : i+1); j<points.size(); j++) {
+            vec2 v = (points[j].pos-points[i].pos) * (dist(points[i].pos, points[j].pos)-arms[i][j-1]);
+            acc += v;
+            frm[j] -= v;
         }
-        //add_acc.push_back(add_ac*elasticity/(float)points.size());
-        add_acc.push_back(add_ac*elasticity/(float)points.size());
+        frm[i] += acc;
+        frm[i] *= elasticity/(float)points.size();
     }
-    return add_acc;
+    return frm;
 }
 
 // Drawing
@@ -115,11 +117,11 @@ void Physical::draw(RenderWindow &window, Color color=Color::Black) {
 
 void Physical::show_av(RenderWindow &window) {
     for (int i = 0; i < points.size(); i++) {
-        window.draw(easy_line(points[i].pos, points[i].pos+points[i].vel/G*30.f, Color(0, 0, 255, 120)), 2, LinesStrip);
-        window.draw(easy_line(points[i].pos, points[i].pos+points[i].force/G, Color::Red), 2, LinesStrip);
+        window.draw(easy_line(points[i].pos, points[i].pos+norm(points[i].vel)*20.f, Color(0, 0, 255, 120)), 2, LinesStrip);
+        window.draw(easy_line(points[i].pos, points[i].pos+norm(points[i].force)*10.f, Color::Red), 2, LinesStrip);
 
         for (int i = 0; i < points.size(); i++) {
-            for (int j = 0; j < points.size(); j++) {
+            for (int j = (i == 0 ? 0 : i+1); j < points.size(); j++) {
                 if (abs(j-i) <= 1 or abs(i-j) == points.size()-1) continue;
                 window.draw(easy_line(points[i].pos, points[j].pos, Color(0, 100, 0, 70)), 2, LinesStrip);
             }

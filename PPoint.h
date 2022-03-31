@@ -20,6 +20,9 @@ public:
         pos += vel * delta_time;
 
         mov = zero;
+
+        //if (pos.x < 0 or pos.x > W) pos.x = W/2;
+        //if (pos.y < 0 or pos.y > H) pos.x = H/2;
     }
 
     void move(vec2 d) { mov += d; }

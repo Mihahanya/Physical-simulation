@@ -1,12 +1,12 @@
 ﻿  main.cpp
 D:\PROJECTS\physic\Physical-simulation\h.h(20,13): warning C4244: return: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\Wall.h(30,32): warning C4244: return: преобразование "const int" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\Wall.h(36,32): warning C4244: return: преобразование "const int" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\Wall.h(32,32): warning C4244: return: преобразование "const int" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\Wall.h(38,32): warning C4244: return: преобразование "const int" в "float", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\Physical.h(44,76): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\main.cpp(17,58): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\main.cpp(18,53): warning C4305: инициализация: усечение из "double" в "float"
   Создание кода
-  2 of 375 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  6 of 384 functions ( 1.6%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    3 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   physic.vcxproj -> D:\PROJECTS\physic\Physical-simulation\x64\Release\physic.exe
