@@ -1,33 +1,87 @@
 #pragma once
+
 #include "h.h"
+#include "Wall.h"
 
 class PPoint
 {
 public:
-    vec2 vel, force, pos, accel;
-    float mass;
+    vec2 vel, force, pos, sliding_f, gravity_f;
+    float mass, jumpling, friction, speed;
+    vector<Wall> walls;
+    Color color;
     
-    PPoint(float mass, vec2 position, vec2 a=vec2(0, G)) {
+    PPoint(float mass, float jumpling, float friction, vec2 position, Color color=Color::Black) {
+        /// PPoint fig(mass, jumpling, friction, pos, col); 
         this->mass = mass;
+        this->jumpling = jumpling;
+        this->friction = friction;
+        this->color = color;
         pos = position;
         vel = zero;
-        accel = a;
+        sliding_f = zero;
+        gravity_f = GRAVITY * mass;
     }
     
-    void frame(float delta_time) {
-        force = mass * (accel+addf) + mov;
-        vel += force * delta_time;
-        pos += vel * delta_time;
-
-        mov = zero;
-
-        //if (pos.x < 0 or pos.x > W) pos.x = W/2;
-        //if (pos.y < 0 or pos.y > H) pos.x = H/2;
-    }
-
+    void frame(float delta_time);
     void move(vec2 d) { mov += d; }
-    void add_force(vec2 d) { addf += d; }
+    void add_wall(Wall wall) { walls.push_back(wall); }
+    
+    void add_window(RenderWindow &window) { this->window = &window; }
+    void draw(float r);
+    void show_av();
 
 private:
-    vec2 mov, addf;
+    vec2 mov;
+    RenderWindow *window;
+    
+    inline void do_walls_collision();
 };
+
+// Simulation
+
+void PPoint::frame(float delta_time) {
+    force = sliding_f + gravity_f + mov;
+    vel += force * delta_time;
+    pos += vel * delta_time;
+
+    speed = dist(zero, force);
+
+    do_walls_collision();
+    
+    mov = zero;
+}
+
+inline void PPoint::do_walls_collision() {
+    for (auto w : walls) {
+        float h = w.y_by_x(pos.x);
+        if (h != INT_MAX) {
+            if ((pos.y > h and !w.upper) or (pos.y < h and w.upper)) {
+                vec2 r = reflect(vel * jumpling, w.normal);
+                if (dist(zero, r) > 50) {
+                    vel = r;
+                    sliding_f = zero;
+                }
+                else {
+                    vel = zero;
+                    //sliding_f += w.direction * dot(w.direction, norm(gravity_f)) * mass * (1.f-friction) * speed;
+                }
+
+                pos = vec2(w.x_by_y(h), h);
+                break;
+            }
+        }
+    }
+}
+
+// Drawing
+
+void PPoint::draw(float r=3) {
+    CircleShape c(r); c.setFillColor(color); c.setPosition(pos - vec2(r, r));
+    (*window).draw(c);
+}
+
+void PPoint::show_av() {
+    (*window).draw(easy_line(pos, pos+norm(vel)*20.f, Color(0, 0, 255, 120)), 2, LinesStrip);
+    (*window).draw(easy_line(pos, pos+norm(force)*10.f, Color::Red), 2, LinesStrip);
+}

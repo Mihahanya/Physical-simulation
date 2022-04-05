@@ -13,7 +13,7 @@ using namespace sf;
 
 typedef Vector2f vec2;
 
-const float G = 300;
+const vec2 GRAVITY = vec2(0, 300);
 vec2 zero = vec2(0, 0);
 
 float dist(vec2 v1, vec2 v2) {
@@ -36,4 +36,34 @@ Vertex* easy_line(vec2 v1, vec2 v2, Color color=Color::Black) {
     Vertex vtx[] = { Vertex(v1), Vertex(v2) };
     vtx[0].color = vtx[1].color = color;
     return vtx;
+}
+
+Color HSVtoRGB(int hue, float sat, float val)
+{
+    hue %= 360;
+    while (hue<0) hue += 360;
+
+    if (sat<0.f) sat = 0.f;
+    if (sat>1.f) sat = 1.f;
+
+    if (val<0.f) val = 0.f;
+    if (val>1.f) val = 1.f;
+
+    int h = hue/60;
+    float f = float(hue)/60-h;
+    float p = val*(1.f-sat);
+    float q = val*(1.f-sat*f);
+    float t = val*(1.f-sat*(1-f));
+
+    switch(h)
+    {
+    default:
+        case 0:
+        case 6: return sf::Color(val*255, t*255, p*255);
+        case 1: return sf::Color(q*255, val*255, p*255);
+        case 2: return sf::Color(p*255, val*255, t*255);
+        case 3: return sf::Color(p*255, q*255, val*255);
+        case 4: return sf::Color(t*255, p*255, val*255);
+        case 5: return sf::Color(val*255, p*255, q*255);
+    }
 }

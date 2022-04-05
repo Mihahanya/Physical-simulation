@@ -1,6 +1,5 @@
 #pragma once
-#include "h.h"
-#include "Wall.h"
+
 #include "PPoint.h"
 
 class Physical
@@ -24,15 +23,18 @@ public:
 
     void add_wall(Wall wall) { walls.push_back(wall); }
 
-    void draw(RenderWindow &window, Color color);
-    void show_av(RenderWindow &window);
-    void show_dots(float r, RenderWindow &window);
+    void draw(Color color);
+    void show_av();
+    void show_dots(float r);
+    void add_window(RenderWindow &window) { this->window = &window; }
 
     void frame(float delta_time);
     
     void move(vec2 d);
 
 private:
+    RenderWindow *window;
+
     inline void take_arms();
     inline vector<vec2> form_shape();
     inline void do_walls_collision(PPoint &point);
@@ -105,37 +107,37 @@ inline vector<vec2> Physical::form_shape() {
 }
 
 // Drawing
-void Physical::draw(RenderWindow &window, Color color=Color::Black) {
+void Physical::draw(Color color=Color::Black) {
     vector<Vertex> vtx; 
     for (int i = 0; i <= points.size(); i++) {
         vtx.push_back(points[(i == points.size()) ? 0 : i].pos);
         vtx[i].color = color;
     }
     Vertex *arrvtx = &vtx[0];
-    window.draw(arrvtx, points.size()+1, LinesStrip);
+    (*window).draw(arrvtx, points.size()+1, LinesStrip);
 }
 
-void Physical::show_av(RenderWindow &window) {
+void Physical::show_av() {
     for (int i = 0; i < points.size(); i++) {
-        window.draw(easy_line(points[i].pos, points[i].pos+norm(points[i].vel)*20.f, Color(0, 0, 255, 120)), 2, LinesStrip);
-        window.draw(easy_line(points[i].pos, points[i].pos+norm(points[i].force)*10.f, Color::Red), 2, LinesStrip);
+        (*window).draw(easy_line(points[i].pos, points[i].pos+norm(points[i].vel)*20.f, Color(0, 0, 255, 120)), 2, LinesStrip);
+        (*window).draw(easy_line(points[i].pos, points[i].pos+norm(points[i].force)*10.f, Color::Red), 2, LinesStrip);
 
         for (int i = 0; i < points.size(); i++) {
             for (int j = (i == 0 ? 0 : i+1); j < points.size(); j++) {
                 if (abs(j-i) <= 1 or abs(i-j) == points.size()-1) continue;
-                window.draw(easy_line(points[i].pos, points[j].pos, Color(0, 100, 0, 70)), 2, LinesStrip);
+                (*window).draw(easy_line(points[i].pos, points[j].pos, Color(0, 100, 0, 70)), 2, LinesStrip);
             }
         }
     }
 }
 
-void Physical::show_dots(float r, RenderWindow &window) {
+void Physical::show_dots(float r) {
     for (PPoint p : points) {
         CircleShape c(r); c.setFillColor(Color::Black); c.setPosition(p.pos - vec2(r, r));
-        window.draw(c);
+        (*window).draw(c);
     }
     CircleShape c(r); c.setFillColor(Color::Black); c.setPosition(center - vec2(r, r));
-    window.draw(c);
+    (*window).draw(c);
 }
 
 // Taking arm connections

@@ -4,7 +4,7 @@
 class Wall
 {
 public:
-	vec2 beg, end;
+	vec2 beg, end, normal, direction;
 	const int OUT = INT32_MAX;
 	bool upper;
 	float k, b, alpha;
@@ -20,13 +20,23 @@ public:
 		b = beg.y - k*beg.x;
 
 		alpha = atan(k);
+
+		normal = norm(vec2(1, -1/k));
+		direction = norm(vec2(1, k));
 	}
 
-	void draw(RenderWindow &window, Color color=Color::Black) {
-		Vertex vtx[2] = { Vertex(beg), Vertex(end) };
+	void draw(Color color=Color::Black) {
+		Vertex vtx[2] ={Vertex(beg), Vertex(end)};
 		vtx[0].color = vtx[1].color = color;
-		window.draw(vtx, 2, Lines);
+		(*window).draw(vtx, 2, Lines);
 	}
+
+	void show_normals() {
+		vec2 mid = (beg+end)/2.f;
+		(*window).draw(easy_line(mid, mid+normal*10.f, Color(255, 0, 255)), 2, LinesStrip);
+	}
+
+    void add_window(RenderWindow &window) { this->window = &window; }
 
 	float y_by_x(float x) {
 		if (x < lx or x > rx) return OUT; 
@@ -42,4 +52,5 @@ public:
 
 private:
 	float lx, rx, uy, dy;
+    RenderWindow *window;
 };

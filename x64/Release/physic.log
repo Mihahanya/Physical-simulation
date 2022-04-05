@@ -1,12 +1,31 @@
 ﻿  main.cpp
 D:\PROJECTS\physic\Physical-simulation\h.h(20,13): warning C4244: return: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\Wall.h(32,32): warning C4244: return: преобразование "const int" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\Wall.h(38,32): warning C4244: return: преобразование "const int" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\Physical.h(44,76): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\main.cpp(18,53): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\h.h(62,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(62,44): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(62,37): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(63,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(63,44): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(63,35): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(64,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(64,44): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(64,35): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(65,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(65,42): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(65,35): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(66,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(66,42): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(66,35): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(67,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(67,44): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(67,37): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\Wall.h(42,32): warning C4244: return: преобразование "const int" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\Wall.h(48,32): warning C4244: return: преобразование "const int" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\main.cpp(9,66): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\main.cpp(10,82): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\main.cpp(10,91): warning C4305: аргумент: усечение из "double" в "float"
   Создание кода
-  6 of 384 functions ( 1.6%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+  11 of 340 functions ( 3.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   physic.vcxproj -> D:\PROJECTS\physic\Physical-simulation\x64\Release\physic.exe

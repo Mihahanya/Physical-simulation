@@ -1,52 +1,62 @@
 ﻿#include <iostream>
 
-#include "Physical.h"
-#include "Wall.h"
+#include "Scene.h"
+#include "PPoint.h"
+
+
+vector<PPoint> points_circle(int sides, float size, vec2 center) {
+    vector<PPoint> points;
+    for (float a=0; a<PI*2 and points.size()<sides; a+=PI/sides*2) {
+        PPoint p(1, 0.2, 0, center + vec2(cos(a), sin(a))*size, HSVtoRGB(360*a/PI/2, 1, 1));
+        points.push_back(p);
+    }
+    return points;
+}
+
 
 int main()
 {
-    RenderWindow window(VideoMode(W, H), "Physical Simulation");
+    RenderWindow window(VideoMode(W, H), "Physical Simulation", Style::Close | Style::Titlebar);
     window.setFramerateLimit(60);
 
     Clock delta_clock;
     vec2 center = vec2(W/2, H/2);
 
-    // Game objects
+    Scene scene(window);
 
-    vec2 cntr = vec2(W/2, 200);
-    int cnt_of_sds = 6;
-    float size=30, mass=1, elastic=100, jumpling=0.3, friction=1;
+    /// Game objects
+
+    /*int cnt_of_sds = 10;
+    float size=10, mass=1, elastic=100, jumpling=1, friction=1;
     Physical fig(mass, elastic, jumpling, friction);
+    fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size);*/
 
-    fig.create_regular_polygon(cntr, cnt_of_sds, size);
+    auto pnts = points_circle(4, 150, center+vec2(15, -70));
+    for (PPoint &p : pnts) scene.add(p);
 
-    // add walls
+    /// add walls
 
-    vector<vec2> ps = { vec2(10, H-200), vec2(W/2, 10), vec2(W-10, H-200), vec2(W/2, H-10), vec2(10, H-200) };
+    vector<vec2> ps = { vec2(0, H-200), vec2(W/2, 0), vec2(W, H-200), vec2(W/2, H), vec2(0, H-200) };
 
     vector<Wall> walls;
     for (int i=0; i<ps.size()-1; i++) {
         Wall w(ps[i], ps[i+1], i==0 or i==1);
-        fig.add_wall(w);
         walls.push_back(w);
     }
+    for (Wall &w : walls) scene.add(w);
     
-    // Main cycle
+    /// Main cycle
 
     while (window.isOpen())
     {
         float delta_time = delta_clock.restart().asSeconds();
         cout << "FPS: " << round(1/delta_time * 10)/10 << "    \r";
-
-        fig.frame(delta_time);
-        /*if (Keyboard::isKeyPressed(Keyboard::A)) fig.move(vec2(-500, 0));
-        if (Keyboard::isKeyPressed(Keyboard::D)) fig.move(vec2( 500, 0));*/
         
-        if (Mouse::isButtonPressed(Mouse::Left)) {
+        /*if (Mouse::isButtonPressed(Mouse::Left)) {
             vec2 m = (vec2)Mouse::getPosition(window);
             float d = dist(m, fig.center);
             fig.move(norm(m-fig.center) * d*10.f);
-        }
+        }*/
 
         //
 
@@ -56,12 +66,20 @@ int main()
 
         window.clear(Color::White);
 
-        fig.draw(window);
-        fig.show_dots(1, window);
-        if (Keyboard::isKeyPressed(Keyboard::Q)) fig.show_av(window);
+        //fig.show_dots(5);
+        if (Keyboard::isKeyPressed(Keyboard::Q)) {
+            for (PPoint *p : scene.points) (*p).show_av();
+            for (Wall *w : scene.walls) (*w).show_normals();
 
-        for (auto w : walls) w.draw(window);
+        }
         
+        if (Keyboard::isKeyPressed(Keyboard::P)) scene.pause = true;
+        else scene.pause = false; 
+        
+        
+        scene.draw();
+        scene.frame(delta_time);
+
         window.display();
     }
 
