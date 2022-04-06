@@ -1,7 +1,6 @@
 ﻿#include <iostream>
 
 #include "Scene.h"
-#include "PPoint.h"
 
 
 vector<PPoint> points_circle(int sides, float size, vec2 center) {
@@ -26,13 +25,14 @@ int main()
 
     /// Game objects
 
-    /*int cnt_of_sds = 10;
-    float size=10, mass=1, elastic=100, jumpling=1, friction=1;
-    Physical fig(mass, elastic, jumpling, friction);
-    fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size);*/
+    int cnt_of_sds = 10;
+    float size=50, mass=1, elastic=10, jumpling=0.8, friction=1;
+    Physical fig(mass, jumpling, elastic, friction);
+    fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size);
+    scene.add(fig);
 
-    auto pnts = points_circle(4, 150, center+vec2(15, -70));
-    for (PPoint &p : pnts) scene.add(p);
+    /*auto pnts = points_circle(4, 150, center+vec2(15, -70));
+    for (PPoint &p : pnts) scene.add(p);*/
 
     /// add walls
 
@@ -52,11 +52,11 @@ int main()
         float delta_time = delta_clock.restart().asSeconds();
         cout << "FPS: " << round(1/delta_time * 10)/10 << "    \r";
         
-        /*if (Mouse::isButtonPressed(Mouse::Left)) {
+        if (Mouse::isButtonPressed(Mouse::Left)) {
             vec2 m = (vec2)Mouse::getPosition(window);
             float d = dist(m, fig.center);
             fig.move(norm(m-fig.center) * d*10.f);
-        }*/
+        }
 
         //
 
@@ -68,15 +68,16 @@ int main()
 
         //fig.show_dots(5);
         if (Keyboard::isKeyPressed(Keyboard::Q)) {
+            for (Physical *p : scene.bodys) (*p).show_av();
             for (PPoint *p : scene.points) (*p).show_av();
             for (Wall *w : scene.walls) (*w).show_normals();
-
         }
         
         if (Keyboard::isKeyPressed(Keyboard::P)) scene.pause = true;
         else scene.pause = false; 
         
         
+        fig.show_dots(2);
         scene.draw();
         scene.frame(delta_time);
 
