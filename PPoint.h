@@ -43,6 +43,10 @@ private:
 void PPoint::frame(float delta_time) {
     force = sliding_f + gravity_f + mov;
     vel += force * delta_time;
+
+    vec2 sqr = vec2(vel.x*abs(vel.x), vel.y*abs(vel.y));
+    vel -= air_resist * (sqr/2.f);
+    
     pos += vel * delta_time;
 
     speed = dist(zero, force);
@@ -58,7 +62,7 @@ inline void PPoint::do_walls_collision() {
         if (h != INT_MAX) {
             if ((pos.y > h and !w.upper) or (pos.y < h and w.upper)) {
                 vec2 r = reflect(vel * jumpling, w.normal);
-                if (dist(zero, r) > 50) {
+                if (dist(zero, r) > 20) {
                     vel = r;
                     sliding_f = zero;
                 }

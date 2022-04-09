@@ -14,6 +14,7 @@ using namespace sf;
 typedef Vector2f vec2;
 
 const vec2 GRAVITY = vec2(0, 300);
+const float air_resist = 0.00001*0;
 vec2 zero = vec2(0, 0);
 
 float dist(vec2 v1, vec2 v2) {

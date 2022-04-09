@@ -2,19 +2,20 @@
 
 #include "PPoint.h"
 
-class Physical
+class SBody
 {
 public:
     vector<PPoint> points;
     vector<vector<float>> arms;
-    float mass, elasticity, jumpling, friction;
+    float mass, elasticity, jumpling, friction, resistance_f;
     vec2 center;
 
-    Physical(float mass, float jumpling, float elasticity, float friction) {
+    SBody(float mass, float jumpling, float elasticity, float resistance_f, float friction) {
         this->mass = mass;
         this->elasticity = elasticity;
         this->jumpling = jumpling;
         this->friction = friction;
+        this->resistance_f = resistance_f;
     }
 
     void create_regular_polygon(vec2 cntr, int cnt_of_sds, float size);
@@ -38,6 +39,7 @@ public:
 
 private:
     RenderWindow *window;
+    vector<vec2> fluct;
 
     inline void take_arms();
     inline vector<vec2> form_shape();
@@ -45,54 +47,59 @@ private:
 
 
 // Creating
-void Physical::create_regular_polygon(vec2 cntr, int cnt_of_sds, float size) {
+void SBody::create_regular_polygon(vec2 cntr, int cnt_of_sds, float size) {
     for (float a=0; a<PI*2 and points.size()<cnt_of_sds; a+=PI/cnt_of_sds*2) {
         PPoint p(mass, jumpling, friction, cntr + vec2(cos(a), sin(a))*size);
         points.push_back(p);
+        fluct.push_back(zero);
     }
     take_arms();
 }
 
-void Physical::create_custom_polygon(vector<vec2> crnrs) {
+void SBody::create_custom_polygon(vector<vec2> crnrs) {
     for (auto t : crnrs) {
         PPoint p(mass, jumpling, friction, t);
         points.push_back(p);
+        fluct.push_back(zero);
     }
     take_arms();
 }
 
 // Simulation
-void Physical::frame(float dt) {
+void SBody::frame(float dt) {
     float delta_time = min(dt, 0.02f);
-    vector<vec2> frm = form_shape();
+    fluct = form_shape();
     center = zero;
+    for (int i = 0; i < points.size(); i++) 
+        points[i].move(fluct[i]); // Regulate the shape
+    
     for (int i = 0; i < points.size(); i++) {
-        points[i].move(frm[i]); // Regulate the shape
         points[i].frame(delta_time);
 
         center += points[i].pos;
     }
+
     center /= (float)points.size();
 }
 
-inline vector<vec2> Physical::form_shape() {
+inline vector<vec2> SBody::form_shape() {
     vector<vec2> frm(points.size());
     for (int i = 0; i < points.size(); i++) {
-        vec2 acc = zero;
         int m = 0;
         for (int j = (i == 0 ? 0 : i+1); j<points.size(); j++) {
             vec2 v = (points[j].pos-points[i].pos) * (dist(points[i].pos, points[j].pos)-arms[i][j-1]);
-            acc += v;
-            frm[j] -= v;
+            vec2 f_e = v * elasticity;
+
+            frm[i] += f_e - fluct[i]*resistance_f;
+            frm[j] += -f_e - fluct[j]*resistance_f;
         }
-        frm[i] += acc;
-        frm[i] *= elasticity/(float)points.size();
+        frm[i] /= (float)points.size();
     }
     return frm;
 }
 
 // Drawing
-void Physical::draw(Color color=Color::Black) {
+void SBody::draw(Color color=Color::Black) {
     vector<Vertex> vtx; 
     for (int i = 0; i <= points.size(); i++) {
         vtx.push_back(points[(i == points.size()) ? 0 : i].pos);
@@ -102,7 +109,7 @@ void Physical::draw(Color color=Color::Black) {
     (*window).draw(arrvtx, points.size()+1, LinesStrip);
 }
 
-void Physical::show_av() {
+void SBody::show_av() {
     for (int i = 0; i < points.size(); i++) {
         points[i].show_av();
 
@@ -115,7 +122,7 @@ void Physical::show_av() {
     }
 }
 
-void Physical::show_dots(float r) {
+void SBody::show_dots(float r) {
     for (int i=0; i<points.size(); i++) points[i].draw(r);
 
     CircleShape c(r); c.setFillColor(Color::Black); c.setPosition(center - vec2(r, r));
@@ -123,7 +130,7 @@ void Physical::show_dots(float r) {
 }
 
 // Taking arm connections
-inline void Physical::take_arms() {
+inline void SBody::take_arms() {
     for (int i=0; i<points.size(); i++) {
         vector<float> a;
         for (int j=0; j<points.size(); j++) {
@@ -134,7 +141,7 @@ inline void Physical::take_arms() {
 }
 
 // Moving
-void Physical::move(vec2 d) {
+void SBody::move(vec2 d) {
     for (PPoint &p : points)
         p.move(d);
 }

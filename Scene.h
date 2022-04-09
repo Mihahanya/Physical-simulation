@@ -6,10 +6,10 @@
 class Scene
 {
 public:
-	//vector<Physical> bodys;
+	//vector<SBody> bodys;
 	vector<PPoint*> points;
 	vector<Wall*> walls;
-	vector<Physical*> bodys;
+	vector<SBody*> bodys;
 	bool pause;
 
 	Scene(RenderWindow &window) {
@@ -28,12 +28,12 @@ public:
 		Wall *w = &obj;
 		(*w).add_window(*window);
 		for (PPoint *p : points) (*p).add_wall(*w);
-		for (Physical *p : bodys) (*p).add_wall(*w);
+		for (SBody *p : bodys) (*p).add_wall(*w);
 		
 		walls.push_back(w); 
 	}
-	void add(Physical &obj) { 
-		Physical *p = &obj;
+	void add(SBody &obj) { 
+		SBody *p = &obj;
 		(*p).add_window(*window);
 		for (Wall *w : walls) (*p).add_wall(*w);
 		
@@ -51,11 +51,11 @@ void Scene::frame(float delta_time) {
 	if (pause) return;
 	
 	for (PPoint *p : points) (*p).frame(delta_time);
-	for (Physical *p : bodys) (*p).frame(delta_time);
+	for (SBody *p : bodys) (*p).frame(delta_time);
 }
 
 void Scene::draw() {
 	for (Wall *w : walls) (*w).draw();
-	for (Physical *b : bodys) (*b).draw();
+	for (SBody *b : bodys) (*b).draw();
 	for (PPoint *p : points) (*p).draw();
 }
