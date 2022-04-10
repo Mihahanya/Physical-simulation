@@ -49,8 +49,6 @@ void PPoint::frame(float delta_time) {
     
     pos += vel * delta_time;
 
-    speed = dist(zero, force);
-
     do_walls_collision();
     
     mov = zero;

@@ -15,7 +15,7 @@ vector<PPoint> points_circle(int sides, float size, vec2 center) {
 
 int main()
 {
-    RenderWindow window(VideoMode(W, H), "SBody Simulation", Style::Close | Style::Titlebar);
+    RenderWindow window(VideoMode(W, H), "Physical Simulation", Style::Close | Style::Titlebar);
     window.setFramerateLimit(60);
 
     Clock delta_clock;
@@ -25,10 +25,11 @@ int main()
 
     /// Game objects
 
-    int cnt_of_sds = 30;
-    float size=50, mass=1, elastic=50, resistance=0.5, jumpling=0.4, friction=1;
+    int cnt_of_sds = 70;
+    float size=50, mass=3, elastic=30, resistance=0.8, jumpling=0.7, friction=1;
     SBody fig(mass, jumpling, elastic, resistance, friction);
     fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size);
+    //fig.create_custom_polygon({ vec2(300, 200), vec2(280, 500), vec2(700, 500), vec2(400, 380) });
     scene.add(fig);
 
     /*auto pnts = points_circle(4, 150, center+vec2(15, -70));
@@ -45,28 +46,30 @@ int main()
     }
     for (Wall &w : walls) scene.add(w);
     
-    /// Main cycle
+    /// Main cycle ///
 
     while (window.isOpen())
     {
-        float delta_time = delta_clock.restart().asSeconds();
-        cout << "FPS: " << round(1/delta_time * 10)/10 << "    \r";
-        
-        if (Mouse::isButtonPressed(Mouse::Left)) {
-            vec2 m = (vec2)Mouse::getPosition(window);
-            float d = dist(m, fig.center);
-            fig.move(norm(m-fig.center) * d*10.f);
-        }
-
-        //
-
         Event e;
         while (window.pollEvent(e))
             if (e.type == Event::Closed) window.close();
 
         window.clear(Color::White);
 
-        //fig.show_dots(5);
+        //
+
+        float delta_time = delta_clock.restart().asSeconds();
+        cout << "FPS: " << round(1/delta_time * 10)/10 << "    \r";
+        
+        if (Mouse::isButtonPressed(Mouse::Left)) {
+            vec2 m = (vec2)Mouse::getPosition(window);
+            vec2 p = m-fig.center;
+
+            fig.move(p*20.f - fig.velocity*2.f);
+
+            window.draw(easy_line(m, fig.center, Color::Green), 2, LinesStrip);
+        }
+
         if (Keyboard::isKeyPressed(Keyboard::Q)) {
             for (SBody *p : scene.bodys) (*p).show_av();
             for (PPoint *p : scene.points) (*p).show_av();
@@ -76,8 +79,10 @@ int main()
         if (Keyboard::isKeyPressed(Keyboard::P)) scene.pause = true;
         else scene.pause = false; 
         
-        fig.show_dots(2);
+        fig.show_dots(1);
         
+        //
+
         scene.draw();
         scene.frame(delta_time);
 

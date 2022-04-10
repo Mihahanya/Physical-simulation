@@ -8,7 +8,7 @@ public:
     vector<PPoint> points;
     vector<vector<float>> arms;
     float mass, elasticity, jumpling, friction, resistance_f;
-    vec2 center;
+    vec2 center, velocity;
 
     SBody(float mass, float jumpling, float elasticity, float resistance_f, float friction) {
         this->mass = mass;
@@ -68,18 +68,20 @@ void SBody::create_custom_polygon(vector<vec2> crnrs) {
 // Simulation
 void SBody::frame(float dt) {
     float delta_time = min(dt, 0.02f);
+    center = velocity = zero;
+
     fluct = form_shape();
-    center = zero;
-    for (int i = 0; i < points.size(); i++) 
-        points[i].move(fluct[i]); // Regulate the shape
     
     for (int i = 0; i < points.size(); i++) {
+        points[i].move(fluct[i]); // Regulate the shape
         points[i].frame(delta_time);
 
         center += points[i].pos;
+        velocity += points[i].vel;
     }
 
     center /= (float)points.size();
+    velocity /= (float)points.size();
 }
 
 inline vector<vec2> SBody::form_shape() {
@@ -110,16 +112,10 @@ void SBody::draw(Color color=Color::Black) {
 }
 
 void SBody::show_av() {
-    for (int i = 0; i < points.size(); i++) {
+    for (int i = 0; i < points.size(); i++)
         points[i].show_av();
-
-        /*for (int i = 0; i < points.size(); i++) {
-            for (int j = (i == 0 ? 0 : i+1); j < points.size(); j++) {
-                if (abs(j-i) <= 1 or abs(i-j) == points.size()-1) continue;
-                (*window).draw(easy_line(points[i].pos, points[j].pos, Color(0, 100, 0, 70)), 2, LinesStrip);
-            }
-        }*/
-    }
+    
+    (*window).draw(easy_line(center, center+norm(velocity)*30.f, Color::Blue), 2, LinesStrip);
 }
 
 void SBody::show_dots(float r) {
