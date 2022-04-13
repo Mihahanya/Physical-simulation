@@ -6,11 +6,11 @@
 class Scene
 {
 public:
-	//vector<SBody> bodys;
 	vector<PPoint*> points;
 	vector<Wall*> walls;
 	vector<SBody*> bodys;
 	bool pause;
+	float delta_time;
 
 	Scene(RenderWindow &window) {
 		this->window = &window;
@@ -40,18 +40,21 @@ public:
 		bodys.push_back(p); 
 	}
 
-	void frame(float delta_time);
+	void frame();
 	void draw();
 
 private:
 	RenderWindow *window;
+    Clock delta_clock;
 };
 
-void Scene::frame(float delta_time) {
+void Scene::frame() {
+	delta_time = delta_clock.restart().asSeconds();
+
 	if (pause) return;
 	
-	for (PPoint *p : points) (*p).frame(delta_time);
 	for (SBody *p : bodys) (*p).frame(delta_time);
+	for (PPoint *p : points) (*p).frame(delta_time);
 }
 
 void Scene::draw() {

@@ -8,31 +8,33 @@ class PPoint
 public:
     vec2 vel, force, pos, sliding_f, gravity_f;
     float mass, jumpling, friction, speed;
-    vector<Wall> walls;
+    vector<Wall*> walls;
     Color color;
+    bool is_static;
     
-    PPoint(float mass, float jumpling, float friction, vec2 position, Color color=Color::Black) {
+    PPoint(float mass, float jumpling, float friction, vec2 position, bool is_static=false, Color color=Color::Black) {
         /// PPoint fig(mass, jumpling, friction, pos, col); 
         this->mass = mass;
         this->jumpling = jumpling;
         this->friction = friction;
         this->color = color;
-        pos = position;
-        vel = zero;
-        sliding_f = zero;
+        this->is_static = is_static;
+        
+        pos = position; prev_pos = pos;
+        vel = zero+vec2(-30, 10)*0.f;
         gravity_f = GRAVITY * mass;
     }
     
     void frame(float delta_time);
     void move(vec2 d) { mov += d; }
-    void add_wall(Wall wall) { walls.push_back(wall); }
+    void add_wall(Wall &wall) { walls.push_back(&wall); }
     
     void add_window(RenderWindow &window) { this->window = &window; }
     void draw(float r);
     void show_av();
 
 private:
-    vec2 mov;
+    vec2 mov, prev_pos;
     RenderWindow *window;
     
     inline void do_walls_collision();
@@ -41,12 +43,15 @@ private:
 // Simulation
 
 void PPoint::frame(float delta_time) {
-    force = sliding_f + gravity_f + mov;
+    if (is_static) return;
+
+    force = gravity_f + mov;
     vel += force * delta_time;
 
     vec2 sqr = vec2(vel.x*abs(vel.x), vel.y*abs(vel.y));
     vel -= air_resist * (sqr/2.f);
     
+    prev_pos = pos;
     pos += vel * delta_time;
 
     do_walls_collision();
@@ -55,21 +60,28 @@ void PPoint::frame(float delta_time) {
 }
 
 inline void PPoint::do_walls_collision() {
-    for (auto w : walls) {
-        float h = w.y_by_x(pos.x);
-        if (h != INT_MAX) {
-            if ((pos.y > h and !w.upper) or (pos.y < h and w.upper)) {
-                vec2 r = reflect(vel * jumpling, w.normal);
-                if (dist(zero, r) > 20) {
-                    vel = r;
-                    sliding_f = zero;
-                }
-                else {
-                    vel = zero;
-                    //sliding_f += w.direction * dot(w.direction, norm(gravity_f)) * mass * (1.f-friction) * speed;
-                }
+    for (Wall *w : walls) {
+        /*vec2 collision; bool contact;
+        tie(collision, contact) = (*w).collised(prev_pos, pos);
 
-                pos = vec2(w.x_by_y(h), h);
+        if (contact) {
+            pos = collision + norm(prev_pos-pos)*1.f;
+            
+            vec2 r = reflect(vel * jumpling, (*w).normal);
+            if (dist(zero, r) > 20) vel = r;
+            else vel = zero;
+
+            break;
+        }*/
+
+        auto h = (*w).y_by_x(pos.x);
+        if (h != nullopt) {
+            if ((pos.y > h and (*w).orient == -1) or (pos.y < h and (*w).orient == 1)) {
+                vec2 r = reflect(vel * jumpling, (*w).normal);
+                if (dist(zero, r) > 50) vel = r;
+                else vel = zero;
+
+                pos = vec2((*w).x_by_y(h.value()).value(), h.value());
                 break;
             }
         }
@@ -84,6 +96,7 @@ void PPoint::draw(float r=3) {
 }
 
 void PPoint::show_av() {
+    (*window).draw(easy_line(pos, prev_pos, Color::Cyan), 2, LinesStrip);
     (*window).draw(easy_line(pos, pos+norm(vel)*20.f, Color(0, 0, 255, 120)), 2, LinesStrip);
     (*window).draw(easy_line(pos, pos+norm(force)*10.f, Color::Red), 2, LinesStrip);
 }

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <tuple>
+#include <optional>
 #include <SFML/Graphics.hpp>
 
 #define PI 3.14159265

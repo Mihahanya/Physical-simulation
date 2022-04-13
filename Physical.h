@@ -1,11 +1,12 @@
 #pragma once
 
-#include "PPoint.h"
+#include "Spring.h"
 
 class SBody
 {
 public:
     vector<PPoint> points;
+    vector<Spring> springs;
     vector<vector<float>> arms;
     float mass, elasticity, jumpling, friction, resistance_f;
     vec2 center, velocity;
@@ -21,7 +22,7 @@ public:
     void create_regular_polygon(vec2 cntr, int cnt_of_sds, float size);
     void create_custom_polygon(vector<vec2> crnrs);
 
-    void add_wall(Wall wall) { 
+    void add_wall(Wall &wall) { 
         for (int i=0; i<points.size(); i++) points[i].add_wall(wall);
     }
 
@@ -42,7 +43,6 @@ private:
     vector<vec2> fluct;
 
     inline void take_arms();
-    inline vector<vec2> form_shape();
 };
 
 
@@ -53,6 +53,7 @@ void SBody::create_regular_polygon(vec2 cntr, int cnt_of_sds, float size) {
         points.push_back(p);
         fluct.push_back(zero);
     }
+    elasticity /= (float)cnt_of_sds;
     take_arms();
 }
 
@@ -62,42 +63,27 @@ void SBody::create_custom_polygon(vector<vec2> crnrs) {
         points.push_back(p);
         fluct.push_back(zero);
     }
+    elasticity /= (float)points.size();
     take_arms();
 }
 
 // Simulation
 void SBody::frame(float dt) {
-    float delta_time = min(dt, 0.02f);
+    float delta_time = min(dt, 0.1f);
     center = velocity = zero;
-
-    fluct = form_shape();
     
-    for (int i = 0; i < points.size(); i++) {
-        points[i].move(fluct[i]); // Regulate the shape
-        points[i].frame(delta_time);
+    for (Spring &s : springs) s.calculate_force();
+    for (Spring &s : springs) s.add_force();
+    
+    for (PPoint &p : points) {
+        p.frame(delta_time);
 
-        center += points[i].pos;
-        velocity += points[i].vel;
+        center += p.pos;
+        velocity += p.vel;
     }
 
     center /= (float)points.size();
     velocity /= (float)points.size();
-}
-
-inline vector<vec2> SBody::form_shape() {
-    vector<vec2> frm(points.size());
-    for (int i = 0; i < points.size(); i++) {
-        int m = 0;
-        for (int j = (i == 0 ? 0 : i+1); j<points.size(); j++) {
-            vec2 v = (points[j].pos-points[i].pos) * (dist(points[i].pos, points[j].pos)-arms[i][j-1]);
-            vec2 f_e = v * elasticity;
-
-            frm[i] += f_e - fluct[i]*resistance_f;
-            frm[j] += -f_e - fluct[j]*resistance_f;
-        }
-        frm[i] /= (float)points.size();
-    }
-    return frm;
 }
 
 // Drawing
@@ -127,12 +113,11 @@ void SBody::show_dots(float r) {
 
 // Taking arm connections
 inline void SBody::take_arms() {
-    for (int i=0; i<points.size(); i++) {
-        vector<float> a;
-        for (int j=0; j<points.size(); j++) {
-            if (j != i) a.push_back(dist(points[j].pos, points[i].pos));
+    for (int i = 0; i < points.size(); i++) {
+        for (int j = (i == 0 ? 0 : i+1); j<points.size(); j++) {
+            Spring s(points[i], points[j], elasticity, resistance_f);
+            springs.push_back(s);
         }
-        arms.push_back(a);
     }
 }
 
