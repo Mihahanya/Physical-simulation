@@ -51,8 +51,8 @@ int main()
     
     //
 
-    Wall test_wall(vec2(W-130, 0), vec2(W-130, H));
-    scene.add(test_wall);
+    //Wall test_wall(vec2(W-130, 0), vec2(W-130, H));
+    //scene.add(test_wall);
 
     /// Main cycle ///
 
@@ -89,7 +89,7 @@ int main()
             for (SBody *p : scene.bodys) (*p).show_av();
             for (PPoint *p : scene.points) (*p).show_av();
             for (Wall *w : scene.walls) (*w).show_normals();
-            test_wall.show_normals();
+            //test_wall.show_normals();
         }
         
         fig.show_dots(1);

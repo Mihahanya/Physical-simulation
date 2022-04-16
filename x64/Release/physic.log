@@ -25,8 +25,8 @@ D:\PROJECTS\physic\Physical-simulation\main.cpp(9,98): warning C4305: аргум
 D:\PROJECTS\physic\Physical-simulation\main.cpp(29,45): warning C4305: инициализация: усечение из "double" в "float"
 D:\PROJECTS\physic\Physical-simulation\main.cpp(29,59): warning C4305: инициализация: усечение из "double" в "float"
   Создание кода
-  1 of 571 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  39 of 571 functions ( 6.8%) were compiled, the rest were copied from previous compilation.
+    27 functions were new in current compilation
+    23 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   physic.vcxproj -> D:\PROJECTS\physic\Physical-simulation\x64\Release\physic.exe
