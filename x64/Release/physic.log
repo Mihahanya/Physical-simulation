@@ -1,32 +1,32 @@
 ﻿  main.cpp
-D:\PROJECTS\physic\Physical-simulation\h.h(23,13): warning C4244: return: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(65,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(65,44): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(65,37): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(66,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(66,44): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(66,35): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(67,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(67,44): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(67,35): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(68,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(68,42): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(68,35): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(69,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(69,42): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(69,35): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(70,51): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(70,44): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\h.h(70,37): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\Physical.h(51,76): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\main.cpp(8,66): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\main.cpp(9,89): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\main.cpp(9,98): warning C4305: аргумент: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\h.h(42,17): warning C4244: return: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(96,47): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(96,40): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(96,33): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(97,47): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(97,40): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(97,31): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(98,47): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(98,40): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(98,31): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(99,47): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(99,38): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(99,31): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(100,47): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(100,38): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(100,31): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(101,47): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(101,40): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\h.h(101,33): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\Physical.h(61,75): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\main.cpp(8,64): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\main.cpp(9,46): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\main.cpp(9,55): warning C4305: аргумент: усечение из "double" в "float"
 D:\PROJECTS\physic\Physical-simulation\main.cpp(29,45): warning C4305: инициализация: усечение из "double" в "float"
 D:\PROJECTS\physic\Physical-simulation\main.cpp(29,59): warning C4305: инициализация: усечение из "double" в "float"
   Создание кода
-  39 of 571 functions ( 6.8%) were compiled, the rest were copied from previous compilation.
-    27 functions were new in current compilation
-    23 functions had inline decision re-evaluated but remain unchanged
+  1 of 541 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   physic.vcxproj -> D:\PROJECTS\physic\Physical-simulation\x64\Release\physic.exe

@@ -51,11 +51,11 @@ protected:
 		k = (end.y-beg.y) / (end.x - beg.x);
 		b = beg.y - k*beg.x;
 
-		if (abs(end.x - beg.x) < 1.5) normal = vec2(1, 0);
-		else if (beg.y == end.y) normal = vec2(0, 1);
-		else normal = norm(vec2(1, -1/k));
+		if		(abs(end.x - beg.x) < 1.5) normal = vec2(1, 0);
+		else if (abs(end.y - beg.y) < 1.5) normal = vec2(0, 1);
+		else normal = vs::norm(vec2(1, -1/k));
 
-		direction = norm(vec2(1, k));
+		direction = vs::norm(vec2(1, k));
 
 		lx = min(beg.x, end.x); rx = max(beg.x, end.x);
 		uy = min(beg.y, end.y); dy = max(beg.y, end.y);
@@ -78,7 +78,7 @@ public:
 
 	void show_normals() {
 		vec2 mid = (beg+end)/2.f;
-		(*window).draw(easy_line(mid+normal*-10.f, mid+normal*10.f, Color(255, 0, 255)), 2, LinesStrip);
+		ff::easy_line(mid+normal*-10.f, mid+normal*10.f, *window, Color(255, 0, 255));
 	}
 
 	void draw(Color color=Color::Black) {

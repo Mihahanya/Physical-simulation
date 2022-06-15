@@ -6,7 +6,7 @@
 vector<PPoint> points_circle(int sides, float size, vec2 center) {
     vector<PPoint> points;
     for (float a=0; a<PI*2 and points.size()<sides; a+=PI/sides*2) {
-        PPoint p(1, 0.9, 0, center + vec2(cos(a), sin(a))*size, false, HSVtoRGB(360*a/PI/2, 1, 1));
+        PPoint p(1, 0.9, 0, HSVtoRGB(360*a/PI/2, 1, 1)); p.pos = center + vec2(cos(a), sin(a))*size;
         points.push_back(p);
     }
     return points;
@@ -15,7 +15,7 @@ vector<PPoint> points_circle(int sides, float size, vec2 center) {
 
 int main()
 {
-    RenderWindow window(VideoMode(W, H), "Physical Simulation", Style::Close | Style::Titlebar);
+    RenderWindow window(sf::VideoMode(W, H), "Physical Simulation", Close | Titlebar);
     window.setFramerateLimit(60);
 
     vec2 center = vec2(W/2, H/2);
@@ -78,11 +78,11 @@ int main()
         
         if (Mouse::isButtonPressed(Mouse::Left) and !scene.pause) {
             vec2 m = (vec2)Mouse::getPosition(window);
-            vec2 p = m-fig.center;
+            vec2 p = m-fig.points[0].pos;
 
-            fig.move(p*20.f - fig.velocity*2.f);
+            fig.points[0].move(p*70.f - fig.points[0].vel*2.f);
 
-            window.draw(easy_line(m, fig.center, Color::Green), 2, LinesStrip);
+            ff::easy_line(m, fig.points[0].pos, window, Color::Green);
         }
 
         if (Keyboard::isKeyPressed(Keyboard::Q)) {
@@ -97,7 +97,7 @@ int main()
         //
 
         scene.draw();
-        scene.frame();
+        scene.update();
 
         window.display();
     }

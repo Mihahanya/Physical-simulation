@@ -12,20 +12,20 @@ public:
     Color color;
     bool is_static;
     
-    PPoint(float mass, float jumpling, float friction, vec2 position, bool is_static=false, Color color=Color::Black) {
+    PPoint(float mass, float jumpling, float friction, Color color=Color::Black) {
         /// PPoint fig(mass, jumpling, friction, pos, col); 
         this->mass = mass;
         this->jumpling = jumpling;
         this->friction = friction;
         this->color = color;
-        this->is_static = is_static;
         
-        pos = position; prev_pos = pos;
-        vel = zero+vec2(-30, 10)*0.f;
+        is_static = false;
+        pos = vs::zero; prev_pos = pos;
+        vel = vs::zero;
         gravity_f = GRAVITY * mass;
     }
     
-    void frame(float delta_time);
+    void update(float delta_time);
     void move(vec2 d) { mov += d; }
     void add_wall(Wall &wall) { walls.push_back(&wall); }
     
@@ -42,21 +42,18 @@ private:
 
 // Simulation
 
-void PPoint::frame(float delta_time) {
+void PPoint::update(float delta_time) {
     if (is_static) return;
 
     force = gravity_f + mov;
     vel += force * delta_time;
-
-    vec2 sqr = vec2(vel.x*abs(vel.x), vel.y*abs(vel.y));
-    vel -= air_resist * (sqr/2.f);
     
     prev_pos = pos;
     pos += vel * delta_time;
 
     do_walls_collision();
     
-    mov = zero;
+    mov = vs::zero;
 }
 
 inline void PPoint::do_walls_collision() {
@@ -77,9 +74,9 @@ inline void PPoint::do_walls_collision() {
         auto h = (*w).y_by_x(pos.x);
         if (h != nullopt) {
             if ((pos.y > h and (*w).orient == -1) or (pos.y < h and (*w).orient == 1)) {
-                vec2 r = reflect(vel * jumpling, (*w).normal);
-                if (dist(zero, r) > 50) vel = r;
-                else vel = zero;
+                vec2 r = vs::reflect(vel * jumpling, (*w).normal);
+                if (vs::dist(vs::zero, r) > 50) vel = r;
+                else vel = vs::zero;
 
                 pos = vec2((*w).x_by_y(h.value()).value(), h.value());
                 break;
@@ -91,12 +88,11 @@ inline void PPoint::do_walls_collision() {
 // Drawing
 
 void PPoint::draw(float r=3) {
-    CircleShape c(r); c.setFillColor(color); c.setPosition(pos - vec2(r, r));
-    (*window).draw(c);
+    ff::easy_circle(pos, r, *window, color);
 }
 
 void PPoint::show_av() {
-    (*window).draw(easy_line(pos, prev_pos, Color::Cyan), 2, LinesStrip);
-    (*window).draw(easy_line(pos, pos+norm(vel)*20.f, Color(0, 0, 255, 120)), 2, LinesStrip);
-    (*window).draw(easy_line(pos, pos+norm(force)*10.f, Color::Red), 2, LinesStrip);
+    ff::easy_line(pos, prev_pos, *window, Color::Cyan);
+    ff::easy_line(pos, pos+vs::norm(vel)*20.f, *window, Color(0, 0, 255, 120));
+    ff::easy_line(pos, pos+vs::norm(force)*10.f, *window, Color::Red);
 }

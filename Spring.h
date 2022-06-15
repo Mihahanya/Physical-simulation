@@ -6,21 +6,21 @@ class Spring
 {
 public:
 	PPoint *p1, *p2;
-	float elasticity, resistance_f, distance;
+	float elasticity, resistance, distance;
 
-	Spring(PPoint &p1, PPoint &p2, float elasticity, float resistance_f) {
+	Spring(PPoint &p1, PPoint &p2, float elasticity, float resistance) {
 		this->p1 = &p1; this->p2 = &p2;
 		this->elasticity = elasticity;
-		this->resistance_f = resistance_f;
-		fluctuation = zero;
-		distance = dist((*this->p1).pos, (*this->p2).pos);
+		this->resistance = resistance;
+		fluctuation = vs::zero;
+		distance = vs::dist((*this->p1).pos, (*this->p2).pos);
 	}
 
 	void calculate_force() {
-		vec2 v = ((*p2).pos-(*p1).pos) * (dist((*p1).pos, (*p2).pos)-distance);
+		vec2 v = ((*p2).pos-(*p1).pos) * (vs::dist((*p1).pos, (*p2).pos)-distance);
         vec2 f_e = v * elasticity;
 
-		vec2 fl = fluctuation*resistance_f;
+		vec2 fl = fluctuation * resistance;
 
         vel1 = f_e - fl;
         vel2 = -f_e + fl;

@@ -40,21 +40,21 @@ public:
 		bodys.push_back(p); 
 	}
 
-	void frame();
+	void update();
 	void draw();
 
 private:
 	RenderWindow *window;
-    Clock delta_clock;
+    sf::Clock delta_clock;
 };
 
-void Scene::frame() {
+void Scene::update() {
 	delta_time = delta_clock.restart().asSeconds();
 
 	if (pause) return;
 	
-	for (SBody *p : bodys) (*p).frame(delta_time);
-	for (PPoint *p : points) (*p).frame(delta_time);
+	for (SBody *p : bodys) (*p).update(delta_time);
+	for (PPoint *p : points) (*p).update(delta_time);
 }
 
 void Scene::draw() {
