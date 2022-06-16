@@ -26,10 +26,10 @@ int main()
 
     /// Game objects
 
-    float mass=2, elastic=15, resistance=0.4, jumpling=0.1, friction=1;
-    SBody fig(mass, jumpling, elastic, resistance, friction);   
+    float mass=2, elastic=20, resistance=0.5, connection_by_dist=1./100, jumpling=0.1, friction=1;
+    SBody fig(mass, jumpling, elastic, resistance, connection_by_dist, friction);   
     
-    int cnt_of_sds = 30; float size=50;
+    int cnt_of_sds = 10; float size=50;
     fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size);
     //fig.create_custom_polygon({ vec2(300, 200), vec2(280, 500), vec2(700, 500), vec2(400, 380) });
     
@@ -51,8 +51,9 @@ int main()
     
     //
 
-    //Wall test_wall(vec2(W-130, 0), vec2(W-130, H));
-    //scene.add(test_wall);
+    //Wall test_wall(vec2(0, H-130), vec2(W, H-130), -1);
+    Wall test_wall(vec2(W-130, 0), vec2(W-130, H), -1);
+    scene.add(test_wall);
 
     /// Main cycle ///
 
@@ -80,7 +81,7 @@ int main()
             vec2 m = (vec2)Mouse::getPosition(window);
             vec2 p = m-fig.points[0].pos;
 
-            fig.points[0].move(p*70.f - fig.points[0].vel*2.f);
+            fig.points[0].move(p*50.f - fig.points[0].vel*2.f);
 
             ff::easy_line(m, fig.points[0].pos, window, Color::Green);
         }
@@ -89,7 +90,6 @@ int main()
             for (SBody *p : scene.bodys) (*p).show_av();
             for (PPoint *p : scene.points) (*p).show_av();
             for (Wall *w : scene.walls) (*w).show_normals();
-            //test_wall.show_normals();
         }
         
         fig.show_dots(1);

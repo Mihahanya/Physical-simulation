@@ -58,29 +58,56 @@ void PPoint::update(float delta_time) {
 
 inline void PPoint::do_walls_collision() {
     for (Wall *w : walls) {
-        /*vec2 collision; bool contact;
-        tie(collision, contact) = (*w).collised(prev_pos, pos);
+        /*Direct temp(prev_pos, pos);
+        vec2 dir = temp.direction == vs::zero ? -vs::norm(GRAVITY) : temp.direction;
+        dir *= 2.f;
 
-        if (contact) {
-            pos = collision + norm(prev_pos-pos)*1.f;
+        vec2 cross; bool contact;
+        tie(cross, contact) = (*w).collised(Direct(prev_pos-dir, pos));
+
+        if (contact or vel == vs::zero) {
+            pos = cross;
+            vec2 reflected_vel = vs::reflect(vel * jumpling, (*w).normal);
             
-            vec2 r = reflect(vel * jumpling, (*w).normal);
-            if (dist(zero, r) > 20) vel = r;
-            else vel = zero;
+            if (vs::dist(vs::zero, reflected_vel) > 50) vel = reflected_vel;
+            else vel = vs::zero;
 
             break;
         }*/
 
-        auto h = (*w).y_by_x(pos.x);
-        if (h != nullopt) {
-            if ((pos.y > h and (*w).orient == -1) or (pos.y < h and (*w).orient == 1)) {
-                vec2 r = vs::reflect(vel * jumpling, (*w).normal);
-                if (vs::dist(vs::zero, r) > 50) vel = r;
-                else vel = vs::zero;
+        vec2 wall_direct = (*w).direction;
+        bool is_reflect = false;
 
-                pos = vec2((*w).x_by_y(h.value()).value(), h.value());
-                break;
+        if (abs(wall_direct.x) > abs(wall_direct.y)) {
+            auto ybx = (*w).y_by_x(pos.x);
+            float match_y = get<0>(ybx);
+        
+            if (get<1>(ybx)) {
+                if ((pos.y > match_y and wall_direct.x < 0) or (pos.y < match_y and wall_direct.x > 0)) {
+                    is_reflect = true;
+                    pos.y = match_y;
+                }
             }
+        }
+        else {
+            auto xby = (*w).x_by_y(pos.y);
+            float match_x = get<0>(xby);
+        
+            if (get<1>(xby)) {
+                if ((pos.x > match_x and wall_direct.y > 0) or (pos.x < match_x and wall_direct.y < 0)) {
+                    is_reflect = true;
+                    pos.x = match_x;
+                }
+            }
+        }
+
+        if (is_reflect) {
+            vec2 r = vs::reflect(vel * jumpling, (*w).normal);
+            
+            if (vs::dist(vs::zero, r) > 50) vel = r;
+            else vel = vs::zero;
+            
+            break;
         }
     }
 }

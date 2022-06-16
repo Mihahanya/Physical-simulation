@@ -49,7 +49,8 @@ private:
 };
 
 void Scene::update() {
-	delta_time = delta_clock.restart().asSeconds();
+	//delta_time = delta_clock.restart().asSeconds();
+	delta_time = 1./60;
 
 	if (pause) return;
 	

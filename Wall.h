@@ -5,62 +5,56 @@
 class Direct
 {
 public:
-	vec2 beg, end, normal, direction;
-	float k, b, angle, lx, rx, uy, dy;
+	vec2 beg, end, normal, direction, coordinates;
+	float a, b, c, angle, lx, rx, uy, dy;
 
 	Direct(vec2 ibeg, vec2 iend) {
 		this->beg = ibeg; this->end = iend;
 		init();
 	}
 
-	optional<float> y_by_x(float x) {
-		if (x < lx or x > rx) return nullopt; 
-		float y = k*x + b;
-		if (y > dy or y < uy) return nullopt;
-		return y;
+	tuple<float, bool> y_by_x(float x) {
+		float y = -(a*x + c) / b;
+		return { y, !out_of_y(y) };
 	}
 
-	optional<float> x_by_y(float y) {
-		if (y > dy or y < uy) return nullopt; 
-		float x = (y - b) / k;
-		if (x < lx or x > rx) return nullopt; 
-		return x;
+	tuple<float, bool> x_by_y(float y) {
+		float x = -(b*y + c) / a;
+		return { x, !out_of_x(x) };
 	}
 
-	tuple<vec2, bool> collised(vec2 from, vec2 to) {
-		Direct path(from, to);
-		bool contact = true;
-		if (k == path.k) contact = false;
+	tuple<vec2, bool> collised(Direct dir) {
+		if (direction == dir.direction or dir.beg == dir.end) return { vs::zero, false };
 
-		float collised_x = (path.b - b) / (k - path.k);
-		if (out_of_x(collised_x) or path.out_of_x(collised_x)) contact = false;
+		float den = a*dir.b - dir.a*b,
+			  x = - (c*dir.b - dir.c*b) / den,
+			  y = - (a*dir.c - dir.a*c) / den;
+		
+		vec2 cross = vec2(x, y);
 
-		float collised_y = k * collised_x + b;
-		if (out_of_y(collised_y) or path.out_of_y(collised_y)) contact = false;
-
-		return { vec2(collised_x, collised_y), contact };
+		return { cross, !(out_of_p(cross) or dir.out_of_p(cross)) };
 	}
 	
 	inline bool out_of_x(float x) {	return x < lx or x > rx; }
 	inline bool out_of_y(float y) {	return y < uy or y > dy; }
+	inline bool out_of_p(vec2 v) { return out_of_x(v.x) or out_of_y(v.y); }
 
 protected:
 	void init() {
-		if (abs(end.x - beg.x) < 0.5) beg.x += 1;
+		a = beg.y-end.y;
+		b = end.x-beg.x;
+		c = -a * beg.x - b * beg.y;
 
-		k = (end.y-beg.y) / (end.x - beg.x);
-		b = beg.y - k*beg.x;
+		normal = vs::norm(vec2(a, b));
 
-		if		(abs(end.x - beg.x) < 1.5) normal = vec2(1, 0);
-		else if (abs(end.y - beg.y) < 1.5) normal = vec2(0, 1);
-		else normal = vs::norm(vec2(1, -1/k));
+		coordinates = end - beg;
 
-		direction = vs::norm(vec2(1, k));
+		direction = (end == beg) ? vs::zero : vs::norm(coordinates);
+
+		//angle = atan(coordinates.y/coordinates.x);
 
 		lx = min(beg.x, end.x); rx = max(beg.x, end.x);
-		uy = min(beg.y, end.y); dy = max(beg.y, end.y);
-		
-		angle = atan(k);
+		uy = min(beg.y, end.y); dy = max(beg.y, end.y);		
 	}
 };
 

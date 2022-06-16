@@ -7,16 +7,17 @@ class SBody
 public:
     vector<PPoint> points;
     vector<Spring> springs;
-    float mass, elasticity, jumpling, friction, resistance;
+    float mass, elasticity, jumpling, friction, resistance, connection_by_dist;
     vec2 obj_center, obj_velocity;
 
-    SBody(float mass, float jumpling, float elasticity, float resistance, float friction) 
+    SBody(float mass, float jumpling, float elasticity, float resistance, float connection_by_dist, float friction) 
     {
         this->mass = mass;
         this->elasticity = elasticity;
         this->jumpling = jumpling;
         this->friction = friction;
         this->resistance = resistance;
+        this->connection_by_dist = connection_by_dist;
         window = nullptr;
 
         central_point = new PPoint(1, 0, 0);
@@ -128,8 +129,8 @@ inline void SBody::take_arms()
     elasticity /= (float)points.size();
 
     for (int i = 0; i < points.size(); i++) {
-        for (int j = (i == 0 ? 0 : i+1); j<points.size(); j++) {
-            Spring s(points[i], points[j], elasticity, resistance);
+        for (int j = i+1; j<points.size(); j++) {
+            Spring s(points[i], points[j], elasticity/(vs::dist(points[i].pos, points[j].pos)*connection_by_dist), resistance);
             springs.push_back(s);
         }
     }
