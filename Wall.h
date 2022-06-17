@@ -13,14 +13,14 @@ public:
 		init();
 	}
 
-	tuple<float, bool> y_by_x(float x) {
+	float y_by_x(float x) {
 		float y = -(a*x + c) / b;
-		return { y, !out_of_y(y) };
+		return y;
 	}
 
-	tuple<float, bool> x_by_y(float y) {
+	float x_by_y(float y) {
 		float x = -(b*y + c) / a;
-		return { x, !out_of_x(x) };
+		return x;
 	}
 
 	tuple<vec2, bool> collised(Direct dir) {
@@ -65,9 +65,9 @@ public:
 	int orient;
 	float drop_zone;
 
-	Wall(vec2 ibeg, vec2 iend, int orient=0) : Direct(ibeg, iend) {
+	Wall(vec2 ibeg, vec2 iend) : Direct(ibeg, iend) {
 		this->orient = orient;
-		this->drop_zone = drop_zone;
+		drop_zone = 15;
 	}
 
 	void show_normals() {

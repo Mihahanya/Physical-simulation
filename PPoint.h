@@ -46,7 +46,7 @@ void PPoint::update(float delta_time) {
     if (is_static) return;
 
     force = gravity_f + mov;
-    vel += force * delta_time;
+    vel += force / mass * delta_time;
     
     prev_pos = pos;
     pos += vel * delta_time;
@@ -79,22 +79,20 @@ inline void PPoint::do_walls_collision() {
         bool is_reflect = false;
 
         if (abs(wall_direct.x) > abs(wall_direct.y)) {
-            auto ybx = (*w).y_by_x(pos.x);
-            float match_y = get<0>(ybx);
+            float match_y = (*w).y_by_x(pos.x);
         
-            if (get<1>(ybx)) {
-                if ((pos.y > match_y and wall_direct.x < 0) or (pos.y < match_y and wall_direct.x > 0)) {
+            if (!(*w).out_of_y(match_y) and !(*w).out_of_x(pos.x)) {
+                if ((pos.y > match_y and pos.y < match_y+(*w).drop_zone and wall_direct.x < 0) or (pos.y < match_y and pos.y > match_y-(*w).drop_zone and wall_direct.x > 0)) {
                     is_reflect = true;
                     pos.y = match_y;
                 }
             }
         }
         else {
-            auto xby = (*w).x_by_y(pos.y);
-            float match_x = get<0>(xby);
+            float match_x = (*w).x_by_y(pos.y);
         
-            if (get<1>(xby)) {
-                if ((pos.x > match_x and wall_direct.y > 0) or (pos.x < match_x and wall_direct.y < 0)) {
+            if (!(*w).out_of_x(match_x) and !(*w).out_of_y(pos.y)) {
+                if ((pos.x > match_x and pos.x < match_x+(*w).drop_zone and wall_direct.y > 0) or (pos.x < match_x and pos.x > match_x-(*w).drop_zone and wall_direct.y < 0)) {
                     is_reflect = true;
                     pos.x = match_x;
                 }
@@ -102,9 +100,9 @@ inline void PPoint::do_walls_collision() {
         }
 
         if (is_reflect) {
-            vec2 r = vs::reflect(vel * jumpling, (*w).normal);
+            vec2 reflexed = vs::reflect(vel * jumpling, (*w).normal);
             
-            if (vs::dist(vs::zero, r) > 50) vel = r;
+            if (vs::dist(vs::zero, reflexed) > 0) vel = reflexed;
             else vel = vs::zero;
             
             break;
@@ -114,7 +112,7 @@ inline void PPoint::do_walls_collision() {
 
 // Drawing
 
-void PPoint::draw(float r=3) {
+void PPoint::draw(float r=10) {
     ff::easy_circle(pos, r, *window, color);
 }
 

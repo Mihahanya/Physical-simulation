@@ -50,7 +50,7 @@ private:
 
 void Scene::update() {
 	//delta_time = delta_clock.restart().asSeconds();
-	delta_time = 1./60;
+	delta_time = 1./1000;
 
 	if (pause) return;
 	
