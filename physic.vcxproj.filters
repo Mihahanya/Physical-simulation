@@ -20,7 +20,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Physical.h">
+    <ClInclude Include="SoftBody.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Wall.h">
@@ -29,13 +29,16 @@
     <ClInclude Include="h.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="PPoint.h">
+    <ClInclude Include="PhysicalPoint.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Spring.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Direct.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

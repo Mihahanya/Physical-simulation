@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PPoint.h"
+#include "PhysicalPoint.h"
 
 class Spring
 {

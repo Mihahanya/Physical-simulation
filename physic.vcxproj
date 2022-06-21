@@ -158,9 +158,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Direct.h" />
     <ClInclude Include="h.h" />
-    <ClInclude Include="Physical.h" />
-    <ClInclude Include="PPoint.h" />
+    <ClInclude Include="SoftBody.h" />
+    <ClInclude Include="PhysicalPoint.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="Wall.h" />

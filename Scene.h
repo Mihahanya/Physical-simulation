@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Physical.h"
-#include "PPoint.h"
+#include "SoftBody.h"
+#include "PhysicalPoint.h"
 
 class Scene
 {
 public:
+	vector<SoftBody*> bodys;
 	vector<PPoint*> points;
 	vector<Wall*> walls;
-	vector<SBody*> bodys;
 	bool pause;
 	float delta_time;
 
@@ -28,12 +28,12 @@ public:
 		Wall *w = &obj;
 		(*w).add_window(*window);
 		for (PPoint *p : points) (*p).add_wall(*w);
-		for (SBody *p : bodys) (*p).add_wall(*w);
+		for (SoftBody *p : bodys) (*p).add_wall(*w);
 		
 		walls.push_back(w); 
 	}
-	void add(SBody &obj) { 
-		SBody *p = &obj;
+	void add(SoftBody &obj) { 
+		SoftBody *p = &obj;
 		(*p).add_window(*window);
 		for (Wall *w : walls) (*p).add_wall(*w);
 		
@@ -44,22 +44,22 @@ public:
 	void draw();
 
 private:
-	RenderWindow *window;
+	RenderWindow *window = nullptr;
     sf::Clock delta_clock;
 };
 
 void Scene::update() {
 	//delta_time = delta_clock.restart().asSeconds();
-	delta_time = 1./1000;
+	delta_time = 1./60;
 
 	if (pause) return;
 	
-	for (SBody *p : bodys) (*p).update(delta_time);
 	for (PPoint *p : points) (*p).update(delta_time);
+	for (SoftBody *p : bodys) (*p).update(delta_time);
 }
 
 void Scene::draw() {
 	for (Wall *w : walls) (*w).draw();
-	for (SBody *b : bodys) (*b).draw();
 	for (PPoint *p : points) (*p).draw();
+	for (SoftBody *b : bodys) (*b).draw();
 }

@@ -34,21 +34,25 @@ using sf::Style::Titlebar;
 
 typedef Vector2f vec2;
 
-const vec2 GRAVITY = vec2(0, 300);
+const vec2 GRAVITY = vec2(0, 800);
 
 namespace vs 
 {
     vec2 zero = vec2(0, 0);
 
-    float dist(vec2 v1, vec2 v2) {
+    inline float dist(vec2 v1, vec2 v2) {
 	    return sqrt(pow(v1.x-v2.x, 2) + pow(v1.y-v2.y, 2));
+    }
+
+    inline float length(vec2 v) {
+        return dist(zero, v);
     }
 
     inline float dot(vec2 a, vec2 b) {
         return a.x*b.x + a.y*b.y;
     }
 
-    vec2 norm(vec2 v) {
+    inline vec2 norm(vec2 v) {
 	    return v / dist(vs::zero, v);
     }
 
