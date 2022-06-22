@@ -6,7 +6,7 @@
 class Scene
 {
 public:
-	vector<SoftBody*> bodys;
+	vector<SoftContour*> bodys;
 	vector<PPoint*> points;
 	vector<Wall*> walls;
 	bool pause;
@@ -28,12 +28,12 @@ public:
 		Wall *w = &obj;
 		(*w).add_window(*window);
 		for (PPoint *p : points) (*p).add_wall(*w);
-		for (SoftBody *p : bodys) (*p).add_wall(*w);
+		for (SoftContour *p : bodys) (*p).add_wall(*w);
 		
 		walls.push_back(w); 
 	}
-	void add(SoftBody &obj) { 
-		SoftBody *p = &obj;
+	void add(SoftContour &obj) { 
+		SoftContour *p = &obj;
 		(*p).add_window(*window);
 		for (Wall *w : walls) (*p).add_wall(*w);
 		
@@ -55,11 +55,11 @@ void Scene::update() {
 	if (pause) return;
 	
 	for (PPoint *p : points) (*p).update(delta_time);
-	for (SoftBody *p : bodys) (*p).update(delta_time);
+	for (SoftContour *p : bodys) (*p).update(delta_time);
 }
 
 void Scene::draw() {
 	for (Wall *w : walls) (*w).draw();
 	for (PPoint *p : points) (*p).draw();
-	for (SoftBody *b : bodys) (*b).draw();
+	for (SoftContour *b : bodys) (*b).draw();
 }

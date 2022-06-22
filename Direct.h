@@ -53,7 +53,7 @@ protected:
 
 		direction = (end == beg) ? vs::zero : vs::norm(coordinates);
 
-		angle = atan(coordinates.y/coordinates.x); //
+		angle = atan(coordinates.y/coordinates.x); 
 
 		lx = min(beg.x, end.x); rx = max(beg.x, end.x);
 		uy = min(beg.y, end.y); dy = max(beg.y, end.y);		

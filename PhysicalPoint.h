@@ -10,11 +10,11 @@ typedef PhysicalPoint PPoint;
 class PhysicalPoint
 {
 public:
-    vec2 vel, pos, sliding_f;
+    vec2 vel, pos;
     float mass, jumpling, friction;
     vector<Wall*> walls;
     Color color;
-    bool is_static;
+    bool is_static, is_collised;
     
     PhysicalPoint() {
         this->mass = 1;
@@ -22,9 +22,12 @@ public:
         this->friction = 0.5;
         this->color = Color::Black;
         
-        is_static = false;
+        is_collised = is_static = false;
         pos = vs::zero; prev_pos = pos;
         vel = vs::zero;
+        
+        gravity_force = GRAVITY * mass;
+        normal_force = friction_force = vs::zero;
     }
 
     PhysicalPoint(float mass, float jumpling, float friction, Color color=Color::Black) {
@@ -33,9 +36,12 @@ public:
         this->friction = friction;
         this->color = color;
         
-        is_static = false;
+        is_collised = is_static = false;
         pos = vs::zero; prev_pos = pos;
         vel = vs::zero;
+
+        gravity_force = GRAVITY * mass;
+        normal_force = friction_force = vs::zero;
     }
     
     void update(float delta_time);
@@ -47,7 +53,7 @@ public:
     void show_av();
 
 private:
-    vec2 mov, prev_pos, force;
+    vec2 mov, prev_pos, force, friction_force, gravity_force, normal_force;
     RenderWindow *window = nullptr;
     
     inline void do_walls_collision();
@@ -58,8 +64,7 @@ private:
 void PhysicalPoint::update(float delta_time) {
     if (is_static) return;
 
-    vec2 gravity_force = GRAVITY * mass;
-    force = gravity_force + mov;
+    force = gravity_force + normal_force + friction_force + mov;
 
     vel += force / mass * delta_time;
     
@@ -91,38 +96,45 @@ inline void PhysicalPoint::do_walls_collision() {
         }*/
 
         vec2 wall_direct = (*w).direction;
-        bool is_reflect = false;
 
         if (abs(wall_direct.x) > abs(wall_direct.y)) {
             float match_y = (*w).y_by_x(pos.x);
         
-            if (!(*w).out_of_y(match_y) and !(*w).out_of_x(pos.x)) {
-                if ((pos.y > match_y and pos.y < match_y+(*w).drop_zone and wall_direct.x < 0) or 
-                    (pos.y < match_y and pos.y > match_y-(*w).drop_zone and wall_direct.x > 0)) 
-                {
-                    is_reflect = true;
-                    pos.y = match_y;
-                }
+            if (!(*w).out_of_p(vec2(pos.x, match_y)) and
+                (pos.y > match_y and pos.y < match_y+(*w).drop_zone and wall_direct.x < 0) or 
+                (pos.y < match_y and pos.y > match_y-(*w).drop_zone and wall_direct.x > 0)) 
+            {
+                is_collised = true;
+                pos.y = match_y;
             }
+            else is_collised = false;
         }
         else {
             float match_x = (*w).x_by_y(pos.y);
         
-            if (!(*w).out_of_x(match_x) and !(*w).out_of_y(pos.y)) {
-                if ((pos.x > match_x and pos.x < match_x+(*w).drop_zone and wall_direct.y > 0) or 
-                    (pos.x < match_x and pos.x > match_x-(*w).drop_zone and wall_direct.y < 0)) 
-                {
-                    is_reflect = true;
-                    pos.x = match_x;
-                }
+            if (!(*w).out_of_p(vec2(match_x, pos.y)) and
+                (pos.x > match_x and pos.x < match_x+(*w).drop_zone and wall_direct.y > 0) or 
+                (pos.x < match_x and pos.x > match_x-(*w).drop_zone and wall_direct.y < 0)) 
+            {
+                is_collised = true;
+                pos.x = match_x;
             }
+            else is_collised = false;
         }
 
-        if (is_reflect) {
+        if (is_collised) {
             vec2 reflexed = vs::reflect(vel * jumpling, (*w).normal);
-            vel = reflexed;
-            break;
+
+            if (vs::length(reflexed) > 50) vel = reflexed;
+            else vel = vs::zero;
+
+            normal_force = (*w).normal * vs::length(force-normal_force) * (1-friction);
+            //friction_force = (*w).direction * vs::dot(vs::norm(gravity_force), (*w).direction);
+
+            return;
         }
+
+        friction_force = normal_force = vs::zero;
     }
 }
 

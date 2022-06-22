@@ -6,7 +6,7 @@
 vector<PPoint> points_circle(int sides, float size, vec2 center) {
     vector<PPoint> points;
     for (float a=0; a<PI*2 and points.size()<sides; a+=PI/sides*2) {
-        PPoint p(1, 0.9, 0, HSVtoRGB(360*a/PI/2, 1, 1)); p.pos = center + vec2(cos(a), sin(a))*size;
+        PPoint p(100, 0.5, 1, HSVtoRGB(360*a/PI/2, 1, 1)); p.pos = center + vec2(cos(a), sin(a))*size;
         points.push_back(p);
     }
     return points;
@@ -27,7 +27,7 @@ int main()
     /// Game objects
 
     float mass=1, jumpling=0.1, elastic=20, resistance=0.5, connection_by_dist=1./100, friction=1;
-    SoftBody fig(mass, jumpling, elastic, resistance, connection_by_dist, friction);   
+    SoftContour fig(mass, jumpling, elastic, resistance, connection_by_dist, friction);   
     
     int cnt_of_sds = 10; float size=50;
     fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size);
@@ -35,12 +35,12 @@ int main()
     
     scene.add(fig);
     
-    auto pnts = points_circle(100, 150, center+vec2(15, -70));
+    auto pnts = points_circle(2000, 150, center+vec2(15, -70));
     for (PPoint &p : pnts) scene.add(p);
 
     /// add walls
 
-    vector<vec2> ps = { vec2(0, H-200), vec2(W/2, 0), vec2(W, H-200), vec2(W/2, H), vec2(0, H-200) };
+    vector<vec2> ps = { vec2(0, H-200), vec2(W/2, 0), vec2(W, H-400), vec2(W/2, H-100), vec2(0, H-200) };
 
     vector<Wall> walls;
     for (int i=0; i<ps.size()-1; i++) {
@@ -50,8 +50,8 @@ int main()
     }
     for (Wall &w : walls) scene.add(w);
 
-    Wall test_wall0(vec2(W, H-130), vec2(0, H-130));
-    scene.add(test_wall0);
+    Wall test_wall0(vec2(W, H-100), vec2(0, H-100));
+    //scene.add(test_wall0);
     
     Wall test_wall(vec2(W-100, 0), vec2(W-100, H));
     scene.add(test_wall);
@@ -80,7 +80,7 @@ int main()
         
 
         if (Keyboard::isKeyPressed(Keyboard::Q)) {
-            for (SoftBody *p : scene.bodys) (*p).show_av();
+            for (SoftContour *p : scene.bodys) (*p).show_av();
             for (PPoint *p : scene.points) (*p).show_av();
             for (Wall *w : scene.walls) (*w).show_normals();
         }

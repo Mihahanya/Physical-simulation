@@ -2,7 +2,7 @@
 
 #include "Spring.h"
 
-class SoftBody
+class SoftContour
 {
 public:
     vector<PPoint> points;
@@ -10,7 +10,7 @@ public:
     float mass, jumpling, elasticity, resistance, connection_by_dist, friction;
     vec2 obj_center, obj_velocity;
 
-    SoftBody(float mass, float jumpling, float elasticity, float resistance, float connection_by_dist, float friction) 
+    SoftContour(float mass, float jumpling, float elasticity, float resistance, float connection_by_dist, float friction) 
     {
         this->mass = mass;
         this->elasticity = elasticity;
@@ -54,7 +54,7 @@ private:
 
 
 // Creating
-void SoftBody::create_regular_polygon(vec2 cntr, int cnt_of_sds, float size) 
+void SoftContour::create_regular_polygon(vec2 cntr, int cnt_of_sds, float size) 
 {
     for (float a=0; (a < PI*2) and (points.size() < cnt_of_sds); a+=PI*2.f/cnt_of_sds) 
     {
@@ -67,7 +67,7 @@ void SoftBody::create_regular_polygon(vec2 cntr, int cnt_of_sds, float size)
     take_arms();
 }
 
-void SoftBody::create_custom_polygon(vector<vec2> crnrs) {
+void SoftContour::create_custom_polygon(vector<vec2> crnrs) {
     for (auto t : crnrs) 
     {
         PPoint p(mass, jumpling, friction); p.pos = t;
@@ -79,7 +79,7 @@ void SoftBody::create_custom_polygon(vector<vec2> crnrs) {
 }
 
 // Simulation
-void SoftBody::update(float dt) {
+void SoftContour::update(float dt) {
     float delta_time = min(dt, 0.1f);
     obj_center = obj_velocity = vs::zero;
     
@@ -97,7 +97,7 @@ void SoftBody::update(float dt) {
 }
 
 // Drawing
-void SoftBody::draw(Color color=Color::Black) {
+void SoftContour::draw(Color color=Color::Black) {
     vector<Vertex> vtx; 
     for (int i = 0; i <= points.size(); i++) {
         vtx.push_back(points[(i == points.size()) ? 0 : i].pos);
@@ -107,20 +107,20 @@ void SoftBody::draw(Color color=Color::Black) {
     (*window).draw(arrvtx, points.size()+1, LinesStrip);
 }
 
-void SoftBody::show_av() {
+void SoftContour::show_av() {
     for (PPoint p : points) p.show_av();
     
     ff::easy_line(obj_center, obj_center + vs::norm(obj_velocity)*30.f, *window, Color::Blue);
 }
 
-void SoftBody::show_dots(float r) {
+void SoftContour::show_dots(float r) {
     for (PPoint p : points) p.draw(r);
 
     ff::easy_circle(obj_center, r, *window);
 }
 
 // Taking arm connections
-inline void SoftBody::take_arms() 
+inline void SoftContour::take_arms() 
 {
     fluct = vector<vec2>(points.size(), vs::zero);
     float elas_norm = elasticity / (float)points.size();
@@ -134,7 +134,7 @@ inline void SoftBody::take_arms()
 }
 
 // Moving
-void SoftBody::move(vec2 d) {
+void SoftContour::move(vec2 d) {
     for (PPoint &p : points)
         p.move(d);
 }

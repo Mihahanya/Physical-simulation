@@ -20,7 +20,7 @@ public:
 
 	void show_normals() {
 		vec2 mid = (beg+end)/2.f;
-		ff::easy_line(mid+normal*-10.f, mid+normal*10.f, *window, Color(255, 0, 255));
+		ff::easy_line(mid+normal*0.f, mid+normal*10.f, *window, Color(255, 0, 255));
 	}
     
 	void add_window(RenderWindow &window) { this->window = &window; }
