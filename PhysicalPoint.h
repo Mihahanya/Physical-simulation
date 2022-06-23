@@ -101,8 +101,8 @@ inline void PhysicalPoint::do_walls_collision() {
             float match_y = (*w).y_by_x(pos.x);
         
             if (!(*w).out_of_p(vec2(pos.x, match_y)) and
-                (pos.y > match_y and pos.y < match_y+(*w).drop_zone and wall_direct.x < 0) or 
-                (pos.y < match_y and pos.y > match_y-(*w).drop_zone and wall_direct.x > 0)) 
+                ((pos.y > match_y and pos.y < match_y+(*w).drop_zone and wall_direct.x < 0) or 
+                (pos.y < match_y and pos.y > match_y-(*w).drop_zone and wall_direct.x > 0))) 
             {
                 is_collised = true;
                 pos.y = match_y;
@@ -113,8 +113,8 @@ inline void PhysicalPoint::do_walls_collision() {
             float match_x = (*w).x_by_y(pos.y);
         
             if (!(*w).out_of_p(vec2(match_x, pos.y)) and
-                (pos.x > match_x and pos.x < match_x+(*w).drop_zone and wall_direct.y > 0) or 
-                (pos.x < match_x and pos.x > match_x-(*w).drop_zone and wall_direct.y < 0)) 
+                ((pos.x > match_x and pos.x < match_x+(*w).drop_zone and wall_direct.y > 0) or 
+                (pos.x < match_x and pos.x > match_x-(*w).drop_zone and wall_direct.y < 0))) 
             {
                 is_collised = true;
                 pos.x = match_x;

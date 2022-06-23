@@ -32,6 +32,9 @@ public:
 		
 		walls.push_back(w); 
 	}
+	void add(VolumetricWall &obj) { 
+		for (Wall *w : obj.walls) add(*w);
+	}
 	void add(SoftContour &obj) { 
 		SoftContour *p = &obj;
 		(*p).add_window(*window);

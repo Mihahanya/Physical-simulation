@@ -6,7 +6,7 @@
 vector<PPoint> points_circle(int sides, float size, vec2 center) {
     vector<PPoint> points;
     for (float a=0; a<PI*2 and points.size()<sides; a+=PI/sides*2) {
-        PPoint p(100, 0.5, 1, HSVtoRGB(360*a/PI/2, 1, 1)); p.pos = center + vec2(cos(a), sin(a))*size;
+        PPoint p(100, 0.95, 0.9, HSVtoRGB(360*a/PI/2, 1, 1)); p.pos = center + vec2(cos(a), sin(a))*size;
         points.push_back(p);
     }
     return points;
@@ -50,11 +50,8 @@ int main()
     }
     for (Wall &w : walls) scene.add(w);
 
-    Wall test_wall0(vec2(W, H-100), vec2(0, H-100));
-    //scene.add(test_wall0);
-    
-    Wall test_wall(vec2(W-100, 0), vec2(W-100, H));
-    scene.add(test_wall);
+    VolumetricWall vw(center+vec2(-60, 250), vec2(70, 30), 0);
+    scene.add(vw);
 
     /// Main cycle ///
 
@@ -95,6 +92,8 @@ int main()
         }
 
         fig.show_dots(1);
+
+        //vw.move_to((vec2)Mouse::getPosition(window));
         
         //
 
