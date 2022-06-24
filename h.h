@@ -59,6 +59,10 @@ namespace vs
     inline vec2 reflect(vec2 rd, vec2 n) {
         return rd - n*2.f*dot(n, rd);
     }
+
+    inline vec2 rotate(vec2 v, float a) {
+        return { v.x*cos(a) - v.y*sin(a), v.x*sin(a) + v.y*cos(a) };
+    }
 }
 
 namespace ff

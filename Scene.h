@@ -17,30 +17,27 @@ public:
 		pause = false;
 	}
 
-	void add(PPoint &obj) { 
-		PPoint *p = &obj;
-		(*p).add_window(*window);
-		for (Wall *w : walls) (*p).add_wall(*w);
+	void add(PPoint *p) { 
+		(*p).add_window(window);
+		for (Wall *w : walls) (*p).add_wall(w);
 		
 		points.push_back(p); 
 	}
-	void add(Wall &obj) { 
-		Wall *w = &obj;
+	void add(Wall *w) { 
 		(*w).add_window(*window);
-		for (PPoint *p : points) (*p).add_wall(*w);
-		for (SoftContour *p : bodys) (*p).add_wall(*w);
+		for (PPoint *p : points) (*p).add_wall(w);
+		for (SoftContour *p : bodys) (*p).add_wall(w);
 		
 		walls.push_back(w); 
 	}
-	void add(VolumetricWall &obj) { 
-		for (Wall *w : obj.walls) add(*w);
+	void add(VolumetricWall *obj) { 
+		for (Wall &w : (*obj).walls) add(&w);
 	}
-	void add(SoftContour &obj) { 
-		SoftContour *p = &obj;
-		(*p).add_window(*window);
-		for (Wall *w : walls) (*p).add_wall(*w);
+	void add(SoftContour *sc) { 
+		(*sc).add_window(window);
+		for (Wall *w : walls) (*sc).add_wall(w);
 		
-		bodys.push_back(p); 
+		bodys.push_back(sc); 
 	}
 
 	void update();

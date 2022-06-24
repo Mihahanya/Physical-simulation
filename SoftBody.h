@@ -27,16 +27,16 @@ public:
     void create_regular_polygon(vec2 cntr, int cnt_of_sds, float size);
     void create_custom_polygon(vector<vec2> crnrs);
 
-    void add_wall(Wall &wall) { 
-        for (int i=0; i<points.size(); i++) points[i].add_wall(wall);
+    void add_wall(Wall *wall) { 
+        for (PPoint &p : points) p.add_wall(wall);
     }
 
     void draw(Color color);
     void show_av();
     void show_dots(float r);
-    void add_window(RenderWindow &window) { 
-        this->window = &window; 
-        for (int i=0; i<points.size(); i++) points[i].add_window(window);
+    void add_window(RenderWindow *window) { 
+        this->window = window; 
+        for (PPoint &p : points) p.add_window(window);
     }
 
     void update(float delta_time);
@@ -127,7 +127,7 @@ inline void SoftContour::take_arms()
 
     for (int i = 0; i < points.size(); i++) {
         for (int j = i+1; j<points.size(); j++) {
-            Spring s(points[i], points[j], elas_norm/(vs::dist(points[i].pos, points[j].pos)*connection_by_dist), resistance);
+            Spring s(&points[i], &points[j], elas_norm/(vs::dist(points[i].pos, points[j].pos)*connection_by_dist), resistance);
             springs.push_back(s);
         }
     }

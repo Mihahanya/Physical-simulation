@@ -8,8 +8,8 @@ public:
 	PPoint *p1, *p2;
 	float elasticity, resistance, distance;
 
-	Spring(PPoint &p1, PPoint &p2, float elasticity, float resistance) {
-		this->p1 = &p1; this->p2 = &p2;
+	Spring(PPoint *p1, PPoint *p2, float elasticity, float resistance) {
+		this->p1 = p1; this->p2 = p2;
 		this->elasticity = elasticity;
 		this->resistance = resistance;
 		fluctuation = vs::zero;

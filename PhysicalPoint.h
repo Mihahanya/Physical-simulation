@@ -46,9 +46,9 @@ public:
     
     void update(float delta_time);
     void move(vec2 d) { mov += d; }
-    void add_wall(Wall &wall) { walls.push_back(&wall); }
+    void add_wall(Wall *wall) { walls.push_back(wall); }
     
-    void add_window(RenderWindow &window) { this->window = &window; }
+    void add_window(RenderWindow *window) { this->window = window; }
     void draw(float r);
     void show_av();
 
@@ -77,17 +77,19 @@ void PhysicalPoint::update(float delta_time) {
 }
 
 inline void PhysicalPoint::do_walls_collision() {
-    for (Wall *w : walls) {
+    for (auto i=0; i < walls.size(); i++) {
+        Wall wll = *walls[i];
+
         /*Direct temp(prev_pos, pos);
         vec2 dir = temp.direction == vs::zero ? -vs::norm(GRAVITY) : temp.direction;
         dir *= 2.f;
 
         vec2 cross; bool contact;
-        tie(cross, contact) = (*w).collised(Direct(prev_pos-dir, pos));
+        tie(cross, contact) = wll.collised(Direct(prev_pos-dir, pos));
 
         if (contact or vel == vs::zero) {
             pos = cross;
-            vec2 reflected_vel = vs::reflect(vel * jumpling, (*w).normal);
+            vec2 reflected_vel = vs::reflect(vel * jumpling, wll.normal);
             
             if (vs::dist(vs::zero, reflected_vel) > 50) vel = reflected_vel;
             else vel = vs::zero;
@@ -95,14 +97,14 @@ inline void PhysicalPoint::do_walls_collision() {
             break;
         }*/
 
-        vec2 wall_direct = (*w).direction;
+        const vec2 wall_direct = wll.direction;
 
         if (abs(wall_direct.x) > abs(wall_direct.y)) {
-            float match_y = (*w).y_by_x(pos.x);
+            float match_y = wll.y_by_x(pos.x);
         
-            if (!(*w).out_of_p(vec2(pos.x, match_y)) and
-                ((pos.y > match_y and pos.y < match_y+(*w).drop_zone and wall_direct.x < 0) or 
-                (pos.y < match_y and pos.y > match_y-(*w).drop_zone and wall_direct.x > 0))) 
+            if (!wll.out_of_p(vec2(pos.x, match_y)) and
+                ((wall_direct.x < 0 and pos.y > match_y and pos.y < match_y+wll.drop_zone) or 
+                (wall_direct.x > 0 and pos.y < match_y and pos.y > match_y-wll.drop_zone))) 
             {
                 is_collised = true;
                 pos.y = match_y;
@@ -110,11 +112,11 @@ inline void PhysicalPoint::do_walls_collision() {
             else is_collised = false;
         }
         else {
-            float match_x = (*w).x_by_y(pos.y);
+            float match_x = wll.x_by_y(pos.y);
         
-            if (!(*w).out_of_p(vec2(match_x, pos.y)) and
-                ((pos.x > match_x and pos.x < match_x+(*w).drop_zone and wall_direct.y > 0) or 
-                (pos.x < match_x and pos.x > match_x-(*w).drop_zone and wall_direct.y < 0))) 
+            if (!wll.out_of_p(vec2(match_x, pos.y)) and
+                ((wall_direct.y > 0 and pos.x > match_x and pos.x < match_x+wll.drop_zone) or 
+                (wall_direct.y < 0 and pos.x < match_x and pos.x > match_x-wll.drop_zone))) 
             {
                 is_collised = true;
                 pos.x = match_x;
@@ -123,17 +125,18 @@ inline void PhysicalPoint::do_walls_collision() {
         }
 
         if (is_collised) {
-            vec2 reflexed = vs::reflect(vel * jumpling, (*w).normal);
+            vec2 reflexed = vs::reflect(vel * jumpling, wll.normal);
 
             if (vs::length(reflexed) > 50) vel = reflexed;
             else vel = vs::zero;
 
-            normal_force = (*w).normal * vs::length(force-normal_force) * (1-friction);
-            //friction_force = (*w).direction * vs::dot(vs::norm(gravity_force), (*w).direction);
+            normal_force = wll.normal * vs::length(force-normal_force) * (1-friction);
+
+            walls.insert(walls.begin(), walls[i]);
+            walls.erase(walls.begin()+i+1);
 
             return;
         }
-
         friction_force = normal_force = vs::zero;
     }
 }

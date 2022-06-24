@@ -23,7 +23,7 @@ public:
 		return x;
 	}
 
-	tuple<vec2, bool> collised(Direct dir) {
+	tuple<vec2, bool> cross(Direct dir) {
 		if (direction == dir.direction or dir.beg == dir.end) return { vs::zero, false };
 
 		float den = a*dir.b - dir.a*b,
