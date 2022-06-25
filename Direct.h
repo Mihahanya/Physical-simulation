@@ -8,8 +8,7 @@ public:
 	vec2 beg, end, normal, direction, coordinates;
 	float angle;
 
-	Direct(vec2 ibeg, vec2 iend) {
-		this->beg = ibeg; this->end = iend;
+	Direct(vec2 ibeg, vec2 iend) : beg(ibeg), end(iend) {
 		init();
 	}
 

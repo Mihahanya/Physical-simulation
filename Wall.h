@@ -7,12 +7,9 @@
 class Wall : public Direct
 {
 public:
-	float drop_zone;
+	float drop_zone = 20;
 
-	Wall(vec2 ibeg, vec2 iend, bool is_dynamic=false) : Direct(ibeg, iend) {
-		drop_zone = 20;
-		this->is_dynamic = is_dynamic;
-	}
+	Wall(vec2 ibeg, vec2 iend, bool is_dynamic=false) : Direct(ibeg, iend), is_dynamic(is_dynamic) {}
 
 	void draw(Color color=Color::Black) {
 		if (is_dynamic) init();
@@ -37,11 +34,8 @@ class VolumetricWall
 public:
 	vector<Wall> walls;
 
-	VolumetricWall(vec2 pos, vec2 sizes, float angle) {
-		this->pos = pos;
-		this->sizes = sizes;
-		this->angle = angle;
-
+	VolumetricWall(vec2 pos, vec2 sizes, float angle) : pos(pos), sizes(sizes), angle(angle)
+	{
 		vector<vec2> ps = {
 			pos + vs::rotate(vec2(sizes.x, sizes.y), angle) / 2.f,
 			pos + vs::rotate(vec2(-sizes.x, sizes.y), angle) / 2.f,

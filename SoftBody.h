@@ -10,18 +10,10 @@ public:
     float mass, jumpling, elasticity, resistance, connection_by_dist, friction;
     vec2 obj_center, obj_velocity;
 
-    SoftContour(float mass, float jumpling, float elasticity, float resistance, float connection_by_dist, float friction) 
+    SoftContour(float mass, float jumpling, float elasticity, float resistance, float connection_by_dist, float friction) :
+        mass(mass), jumpling(jumpling), elasticity(elasticity), resistance(resistance), connection_by_dist(connection_by_dist), friction(friction)
     {
-        this->mass = mass;
-        this->elasticity = elasticity;
-        this->jumpling = jumpling;
-        this->friction = friction;
-        this->resistance = resistance;
-        this->connection_by_dist = connection_by_dist;
-        window = nullptr;
-
-        central_point = new PPoint(1, 0, 0);
-        central_point->is_static = true; 
+        central_point.is_static = true; 
     }
 
     void create_regular_polygon(vec2 cntr, int cnt_of_sds, float size);
@@ -44,10 +36,9 @@ public:
     void move(vec2 d);
 
 private:
-    PPoint *central_point;
+    PPoint central_point {1, 0, 0};
 
-    RenderWindow *window;
-    vector<vec2> fluct;
+    RenderWindow *window = nullptr;
 
     inline void take_arms();
 };
@@ -62,7 +53,7 @@ void SoftContour::create_regular_polygon(vec2 cntr, int cnt_of_sds, float size)
         p.pos = cntr + vec2(cos(a), sin(a))*size;
         points.push_back(p);
 
-        central_point->pos += p.pos / (float)cnt_of_sds;
+        central_point.pos += p.pos / (float)cnt_of_sds;
     }
     take_arms();
 }
@@ -73,7 +64,7 @@ void SoftContour::create_custom_polygon(vector<vec2> crnrs) {
         PPoint p(mass, jumpling, friction); p.pos = t;
         points.push_back(p);
 
-        central_point->pos += p.pos / (float)crnrs.size();
+        central_point.pos += p.pos / (float)crnrs.size();
     }
     take_arms();
 }
@@ -93,7 +84,7 @@ void SoftContour::update(float dt) {
         obj_velocity += p.vel / (float)points.size();
     }
 
-    central_point->pos = obj_center;
+    central_point.pos = obj_center;
 }
 
 // Drawing
@@ -122,7 +113,6 @@ void SoftContour::show_dots(float r) {
 // Taking arm connections
 inline void SoftContour::take_arms() 
 {
-    fluct = vector<vec2>(points.size(), vs::zero);
     float elas_norm = elasticity / (float)points.size();
 
     for (int i = 0; i < points.size(); i++) {

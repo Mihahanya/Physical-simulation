@@ -20,7 +20,7 @@ int main()
 
     vec2 center = vec2(W/2, H/2);
 
-    Scene scene(window);
+    Scene scene(&window);
 
     bool is_focuse = true;
 
@@ -29,7 +29,7 @@ int main()
     float mass=1, jumpling=0.1, elastic=20, resistance=0.5, connection_by_dist=1./100, friction=1;
     SoftContour fig(mass, jumpling, elastic, resistance, connection_by_dist, friction);   
     
-    int cnt_of_sds = 100; float size=50;
+    int cnt_of_sds = 10; float size=50;
     fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size);
     //fig.create_custom_polygon({ vec2(300, 200), vec2(280, 500), vec2(700, 500), vec2(400, 380) });
     

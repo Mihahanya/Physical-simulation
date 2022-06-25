@@ -9,13 +9,10 @@ public:
 	vector<SoftContour*> bodys;
 	vector<PPoint*> points;
 	vector<Wall*> walls;
-	bool pause;
 	float delta_time;
+	bool pause = false;
 
-	Scene(RenderWindow &window) {
-		this->window = &window;
-		pause = false;
-	}
+	Scene(RenderWindow *window) : window(window) {}
 
 	void add(PPoint *p) { 
 		(*p).add_window(window);
@@ -49,8 +46,8 @@ private:
 };
 
 void Scene::update() {
-	//delta_time = delta_clock.restart().asSeconds();
-	delta_time = 1./60;
+	delta_time = delta_clock.restart().asSeconds();
+	//delta_time = 1./60;
 
 	if (pause) return;
 	

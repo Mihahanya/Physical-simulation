@@ -10,38 +10,28 @@ typedef PhysicalPoint PPoint;
 class PhysicalPoint
 {
 public:
-    vec2 vel, pos;
-    float mass, jumpling, friction;
+    vec2 vel = vs::zero, 
+         pos = vs::zero;
+
+    float mass = 1, 
+          jumpling = 0.9, 
+          friction = 0.5;
+    
+    Color color = Color::Black;
+    
+    bool is_static = false, 
+         is_collised = false;
+    
     vector<Wall*> walls;
-    Color color;
-    bool is_static, is_collised;
     
     PhysicalPoint() {
-        this->mass = 1;
-        this->jumpling = 0.9;
-        this->friction = 0.5;
-        this->color = Color::Black;
-        
-        is_collised = is_static = false;
-        pos = vs::zero; prev_pos = pos;
-        vel = vs::zero;
-        
         gravity_force = GRAVITY * mass;
-        normal_force = friction_force = vs::zero;
     }
 
-    PhysicalPoint(float mass, float jumpling, float friction, Color color=Color::Black) {
-        this->mass = mass;
-        this->jumpling = jumpling;
-        this->friction = friction;
-        this->color = color;
-        
-        is_collised = is_static = false;
-        pos = vs::zero; prev_pos = pos;
-        vel = vs::zero;
-
+    PhysicalPoint(float mass, float jumpling, float friction, Color color=Color::Black) : 
+        mass(mass), jumpling(jumpling), friction(friction), color(color) 
+    {
         gravity_force = GRAVITY * mass;
-        normal_force = friction_force = vs::zero;
     }
     
     void update(float delta_time);
@@ -53,7 +43,11 @@ public:
     void show_av();
 
 private:
-    vec2 mov, prev_pos, force, friction_force, gravity_force, normal_force;
+    vec2 mov, force, gravity_force,
+         friction_force = vs::zero,
+         normal_force = vs::zero,
+         prev_pos = vs::zero;
+
     RenderWindow *window = nullptr;
     
     inline void do_walls_collision();
@@ -132,8 +126,10 @@ inline void PhysicalPoint::do_walls_collision() {
 
             normal_force = wll.normal * vs::length(force-normal_force) * (1-friction);
 
-            walls.insert(walls.begin(), walls[i]);
-            walls.erase(walls.begin()+i+1);
+            if (i != 0) {
+                walls.insert(walls.begin(), walls[i]);
+                walls.erase(walls.begin()+i+1);
+            }
 
             return;
         }
