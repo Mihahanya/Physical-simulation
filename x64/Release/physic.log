@@ -19,8 +19,11 @@ D:\PROJECTS\physic\Physical-simulation\h.h(122,47): warning C4244: аргуме�
 D:\PROJECTS\physic\Physical-simulation\h.h(122,40): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\h.h(122,33): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\PhysicalPoint.h(17,20): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\PhysicalPoint.h(122,32): warning C4834: отмена возвращаемого значения функции с атрибутом "nodiscard"
+D:\PROJECTS\physic\Physical-simulation\PhysicalPoint.h(123,37): warning C4834: отмена возвращаемого значения функции с атрибутом "nodiscard"
 D:\PROJECTS\physic\Physical-simulation\SoftBody.h(46,72): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\Scene.h(63,19): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\Scene.h(67,17): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\Scene.h(67,7): warning C4244: инициализация: преобразование "double" в "const float", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\main.cpp(7,64): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\main.cpp(8,49): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\main.cpp(8,58): warning C4305: аргумент: усечение из "double" в "float"
@@ -28,8 +31,8 @@ D:\PROJECTS\physic\Physical-simulation\main.cpp(28,31): warning C4305: иниц�
 D:\PROJECTS\physic\Physical-simulation\main.cpp(28,98): warning C4305: инициализация: усечение из "double" в "float"
 D:\PROJECTS\physic\Physical-simulation\main.cpp(93,29): warning C4305: +=: усечение из "double" в "float"
   Создание кода
-  1 of 574 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+  3 of 557 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   physic.vcxproj -> D:\PROJECTS\physic\Physical-simulation\x64\Release\physic.exe

@@ -29,7 +29,7 @@ private:
     PPoint central_point {1, 0, 0};
     vector<Spring> springs{};
 
-    inline void take_arms();
+    void take_arms();
 };
 
 // Constructors 

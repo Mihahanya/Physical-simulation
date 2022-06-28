@@ -26,6 +26,9 @@ public:
 private:
 	RenderWindow *window = nullptr;
     sf::Clock delta_clock;
+
+	float stabilize_dt(float new_dt);
+	static float median(float, float, float);
 };
 
 
@@ -57,10 +60,24 @@ void Scene::add(SoftContour& sc) {
 	bodys.push_back(&sc);
 }
 
+float Scene::stabilize_dt(float new_dt) {
+	static float dt = new_dt;
+
+	const float d = new_dt - dt,
+				k = (abs(d) < 15) ? 0.7 : 0.3;
+	dt += d * k;
+	return dt;
+}
+
+inline float Scene::median(float a, float b, float c) {
+	return (max(a, b) == max(b, c)) ? max(a, c) : max(b, min(a, c));
+}
+
 void Scene::update() {
 	delta_time = delta_clock.restart().asSeconds();
-	//float dt = min(delta_time, 0.1f);
-	float dt = 1./100;
+	float dt = stabilize_dt(delta_time);
+	delta_time = dt;
+	//float dt = 1./100;
 
 	if (pause) return;
 
@@ -69,7 +86,7 @@ void Scene::update() {
 }
 
 void Scene::draw() {
-	for (Wall* w : walls) (*w).draw();
+	for (Wall* w : walls) (*w).draw_update();
 	for (PPoint* p : points) (*p).draw();
 	for (SoftContour* b : bodys) (*b).draw();
 }

@@ -96,29 +96,17 @@ inline void PhysicalPoint::do_walls_collision() {
             break;
         }*/
 
-        const vec2 wall_direct = wll.direction;
-
-        if (abs(wall_direct.x) > abs(wall_direct.y)) {
-            const float match_y = wll.y_by_x(pos.x);
-        
-            if (!wll.out_of_p(vec2(pos.x, match_y)) and
-                ((wall_direct.x < 0 and pos.y > match_y and pos.y < match_y+wll.drop_zone) or 
-                (wall_direct.x > 0 and pos.y < match_y and pos.y > match_y-wll.drop_zone))) 
-            {
+        if (wll.orient == Vertical) {        
+            if (wll.vertical_ingress(pos)) {
                 is_collised = true;
-                pos.y = match_y;
+                pos.y = wll.y_by_x(pos.x);
             }
             else is_collised = false;
         }
-        else {
-            const float match_x = wll.x_by_y(pos.y);
-        
-            if (!wll.out_of_p(vec2(match_x, pos.y)) and
-                ((wall_direct.y > 0 and pos.x > match_x and pos.x < match_x+wll.drop_zone) or 
-                (wall_direct.y < 0 and pos.x < match_x and pos.x > match_x-wll.drop_zone))) 
-            {
+        else if (wll.orient == Horizontal) {
+            if (wll.horizontal_ingress(pos)) {
                 is_collised = true;
-                pos.x = match_x;
+                pos.x = wll.x_by_y(pos.y);
             }
             else is_collised = false;
         }
@@ -131,10 +119,8 @@ inline void PhysicalPoint::do_walls_collision() {
 
             normal_force = wll.normal * vs::length(force-normal_force) * (1-friction);
 
-            if (i != 0) {
-                walls.insert(walls.begin(), walls[i]);
-                walls.erase(walls.begin()+i+1);
-            }
+            if (i == 0) walls[0], walls[1] = walls[1], walls[0];
+            else if (i != 1) walls[1], walls[i] = walls[i], walls[1];
 
             return;
         }
