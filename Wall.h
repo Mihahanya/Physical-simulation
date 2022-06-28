@@ -1,68 +1,48 @@
 #pragma once
 
-#include "h.h"
 #include "Scene.h"
 #include "Direct.h"
 
-class Wall : public Direct
+enum WallOrient {
+	Horizontal,
+	Vertical
+};
+
+class Wall : public Direct, public Drawable
 {
 public:
 	float drop_zone = 20;
+	WallOrient s_orient;
 
-	Wall(vec2 ibeg, vec2 iend, bool is_dynamic=false) : Direct(ibeg, iend), is_dynamic(is_dynamic) {}
+	Wall(vec2 ibeg, vec2 iend, bool is_dynamic);
 
-	void draw(Color color=Color::Black) {
-		if (is_dynamic) init();
-		ff::easy_line(beg, end, *window);
-	}
+	void draw(Color color);
 
-	void show_normals() {
-		vec2 mid = (beg+end)/2.f;
-		ff::easy_line(mid-normal*drop_zone, mid, *window, Color(255, 0, 255));
-	}
-    
-	void add_window(RenderWindow &window) { this->window = &window; }
-
+	void show_normals();
 private:
 	bool is_dynamic;
-    RenderWindow *window = nullptr;
+
+	void init();
 };
 
 
-class VolumetricWall
-{
-public:
-	vector<Wall> walls;
+Wall::Wall(vec2 ibeg, vec2 iend, bool is_dynamic=false) : Direct(ibeg, iend), is_dynamic(is_dynamic) {
+	init();
+}
 
-	VolumetricWall(vec2 pos, vec2 sizes, float angle) : pos(pos), sizes(sizes), angle(angle)
-	{
-		vector<vec2> ps = {
-			pos + vs::rotate(vec2(sizes.x, sizes.y), angle) / 2.f,
-			pos + vs::rotate(vec2(-sizes.x, sizes.y), angle) / 2.f,
-			pos + vs::rotate(vec2(-sizes.x, -sizes.y), angle) / 2.f,
-			pos + vs::rotate(vec2(sizes.x, -sizes.y), angle) / 2.f,
-		};
-		std::reverse(ps.begin(), ps.end());
+void Wall::init() {
+	init_param();
 
-		float wdz = sizes.x / 3.f,
-			  hdz = sizes.y / 3.f;
+	s_orient = (direction.x > direction.y) ? Horizontal : Vertical;
+}
 
-		for (int i=0; i<ps.size(); i++) {
-			Wall w(ps[i], ps[(i == ps.size()-1) ? 0 : i+1], true);
-			w.drop_zone = (i % 2 == 0) ? hdz : wdz;
-			walls.push_back(w);
-		}
-	}
+void Wall::draw(Color color=Color::Black) {
+	if (is_dynamic) init();
+	ff::easy_line(beg, end, *window);
+}
 
-	void move_to(vec2 new_pos) {
-		for (Wall &w : walls) {
-			w.beg += -pos + new_pos;
-			w.end += -pos + new_pos;
-		}
-		pos = new_pos;
-	}
-
-private:
-	vec2 pos, sizes;
-	float angle;
-};
+void Wall::show_normals() {
+	vec2 mid = (beg + end) / 2.f;
+	ff::easy_line(mid + normal * 10.f, mid, *window, Color(255, 0, 255));
+	ff::easy_line(mid + normal * 10.f, mid, *window, Color(255, 0, 255));
+}

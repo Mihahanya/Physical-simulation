@@ -164,6 +164,7 @@
     <ClInclude Include="PhysicalPoint.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Spring.h" />
+    <ClInclude Include="VolumetricWall.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

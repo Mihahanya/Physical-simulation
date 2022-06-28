@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\PROJECTS\Physical-simulation\x64\Release\physic.exe</FullPath>
+      <FullPath>D:\PROJECTS\physic\Physical-simulation\x64\Release\physic.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

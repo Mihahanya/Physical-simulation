@@ -2,58 +2,54 @@
 
 #include "Spring.h"
 
-class SoftContour
+class SoftContour : public Drawable
 {
 public:
-    vector<PPoint> points;
-    vector<Spring> springs;
-    float mass, jumpling, elasticity, resistance, connection_by_dist, friction;
+    vector<PPoint> points{};
+    float mass, jumpling, friction, elasticity, resistance, connection_by_dist;
     vec2 obj_center, obj_velocity;
 
-    SoftContour(float mass, float jumpling, float elasticity, float resistance, float connection_by_dist, float friction) :
-        mass(mass), jumpling(jumpling), elasticity(elasticity), resistance(resistance), connection_by_dist(connection_by_dist), friction(friction)
-    {
-        central_point.is_static = true; 
-    }
+    SoftContour(float mass, float jumpling, float friction, float elasticity, float resistance, float connection_by_dist);
 
-    void create_regular_polygon(vec2 cntr, int cnt_of_sds, float size);
+    void create_regular_polygon(vec2 cntr, int sides_n, float radius);
     void create_custom_polygon(vector<vec2> crnrs);
 
-    void add_wall(Wall *wall) { 
-        for (PPoint &p : points) p.add_wall(wall);
-    }
-
-    void draw(Color color);
-    void show_av();
-    void show_dots(float r);
-    void add_window(RenderWindow *window) { 
-        this->window = window; 
-        for (PPoint &p : points) p.add_window(window);
-    }
-
     void update(float delta_time);
-    
-    void move(vec2 d);
+    void add_force(vec2);
+
+    void add_wall(Wall*);
+
+    void draw(Color);
+    void show_av();
+    void show_dots(float radius);
+
+    void set_window(RenderWindow*);
 
 private:
     PPoint central_point {1, 0, 0};
-
-    RenderWindow *window = nullptr;
+    vector<Spring> springs{};
 
     inline void take_arms();
 };
 
+// Constructors 
+
+SoftContour::SoftContour(float mass, float jumpling, float friction, float elasticity, float resistance, float connection_by_dist) :
+    mass(mass), jumpling(jumpling), friction(friction), elasticity(elasticity), resistance(resistance), connection_by_dist(connection_by_dist)
+{
+    central_point.is_static = true;
+}
 
 // Creating
-void SoftContour::create_regular_polygon(vec2 cntr, int cnt_of_sds, float size) 
+void SoftContour::create_regular_polygon(vec2 cntr, int sides_n, float radius)
 {
-    for (float a=0; (a < PI*2) and (points.size() < cnt_of_sds); a+=PI*2.f/cnt_of_sds) 
+    for (float a=0; (a < PI*2) and (points.size() < sides_n); a+=PI*2.f/ sides_n)
     {
         PPoint p(mass, jumpling, friction); 
-        p.pos = cntr + vec2(cos(a), sin(a))*size;
+        p.pos = cntr + vec2(cos(a), sin(a)) * radius;
         points.push_back(p);
 
-        central_point.pos += p.pos / (float)cnt_of_sds;
+        central_point.pos += p.pos / (float)sides_n;
     }
     take_arms();
 }
@@ -69,9 +65,17 @@ void SoftContour::create_custom_polygon(vector<vec2> crnrs) {
     take_arms();
 }
 
+void SoftContour::add_wall(Wall* wall) {
+    for (PPoint& p : points) p.add_wall(wall);
+}
+
+void SoftContour::set_window(RenderWindow* window) {
+    this->window = window;
+    for (PPoint& p : points) p.set_window(window);
+}
+
 // Simulation
-void SoftContour::update(float dt) {
-    float delta_time = min(dt, 0.1f);
+void SoftContour::update(float delta_time) {
     obj_center = obj_velocity = vs::zero;
     
     for (Spring &s : springs) s.calculate_force();
@@ -100,14 +104,12 @@ void SoftContour::draw(Color color=Color::Black) {
 
 void SoftContour::show_av() {
     for (PPoint p : points) p.show_av();
-    
     ff::easy_line(obj_center, obj_center + vs::norm(obj_velocity)*30.f, *window, Color::Blue);
 }
 
-void SoftContour::show_dots(float r) {
-    for (PPoint p : points) p.draw(r);
-
-    ff::easy_circle(obj_center, r, *window);
+void SoftContour::show_dots(float radius) {
+    for (PPoint p : points) p.draw(radius);
+    ff::easy_circle(obj_center, radius, *window);
 }
 
 // Taking arm connections
@@ -124,8 +126,8 @@ inline void SoftContour::take_arms()
 }
 
 // Moving
-void SoftContour::move(vec2 d) {
+void SoftContour::add_force(vec2 f) {
     for (PPoint &p : points)
-        p.move(d);
+        p.add_force(f);
 }
 

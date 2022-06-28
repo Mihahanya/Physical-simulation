@@ -4,11 +4,7 @@
 #include <tuple>
 #include <optional>
 #include <SFML/Graphics.hpp>
-
-#define PI 3.14159265
-
-#define W 800
-#define H 800
+#include <iostream>
 
 using std::cout; 
 using std::min; 
@@ -35,6 +31,21 @@ using sf::Style::Titlebar;
 typedef Vector2f vec2;
 
 const vec2 GRAVITY = vec2(0, 800);
+
+constexpr int W = 800;
+constexpr int H = 800;
+
+#define PI 3.14159265
+
+class Drawable {
+public:
+    void set_window(RenderWindow* window) { 
+        this->window = window; 
+    }
+
+protected:
+    RenderWindow* window = nullptr;
+};
 
 namespace vs 
 {

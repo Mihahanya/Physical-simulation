@@ -7,7 +7,7 @@ class PhysicalPoint;
 
 typedef PhysicalPoint PPoint;
 
-class PhysicalPoint
+class PhysicalPoint : public Drawable
 {
 public:
     vec2 vel = vs::zero, 
@@ -17,48 +17,53 @@ public:
           jumpling = 0.9, 
           friction = 0.5;
     
-    Color color = Color::Black;
-    
     bool is_static = false, 
          is_collised = false;
     
-    vector<Wall*> walls;
-    
-    PhysicalPoint() {
-        gravity_force = GRAVITY * mass;
-    }
+    Color color = Color::Black;
 
-    PhysicalPoint(float mass, float jumpling, float friction, Color color=Color::Black) : 
-        mass(mass), jumpling(jumpling), friction(friction), color(color) 
-    {
-        gravity_force = GRAVITY * mass;
-    }
+    
+    PhysicalPoint();
+    PhysicalPoint(float mass, float jumpling, float friction, Color color);
     
     void update(float delta_time);
-    void move(vec2 d) { mov += d; }
-    void add_wall(Wall *wall) { walls.push_back(wall); }
+
+    void add_force(vec2);
     
-    void add_window(RenderWindow *window) { this->window = window; }
-    void draw(float r);
+    void add_wall(Wall*);
+    
+    void draw(float radius);
     void show_av();
 
 private:
-    vec2 mov, force, gravity_force,
+    vector<Wall*> walls{};
+
+    vec2 addf, force, gravity_force,
          friction_force = vs::zero,
          normal_force = vs::zero,
          prev_pos = vs::zero;
 
-    RenderWindow *window = nullptr;
-    
     inline void do_walls_collision();
 };
+
+// Constructors
+
+PhysicalPoint::PhysicalPoint() {
+    gravity_force = GRAVITY * mass;
+}
+
+PhysicalPoint::PhysicalPoint(float mass, float jumpling, float friction, Color color=Color::Black) :
+    mass(mass), jumpling(jumpling), friction(friction), color(color)
+{
+    gravity_force = GRAVITY * mass;
+}
 
 // Simulation
 
 void PhysicalPoint::update(float delta_time) {
     if (is_static) return;
 
-    force = gravity_force + normal_force + friction_force + mov;
+    force = gravity_force + normal_force + friction_force + addf;
 
     vel += force / mass * delta_time;
     
@@ -67,7 +72,7 @@ void PhysicalPoint::update(float delta_time) {
 
     do_walls_collision();
     
-    mov = vs::zero;
+    addf = vs::zero;
 }
 
 inline void PhysicalPoint::do_walls_collision() {
@@ -94,7 +99,7 @@ inline void PhysicalPoint::do_walls_collision() {
         const vec2 wall_direct = wll.direction;
 
         if (abs(wall_direct.x) > abs(wall_direct.y)) {
-            float match_y = wll.y_by_x(pos.x);
+            const float match_y = wll.y_by_x(pos.x);
         
             if (!wll.out_of_p(vec2(pos.x, match_y)) and
                 ((wall_direct.x < 0 and pos.y > match_y and pos.y < match_y+wll.drop_zone) or 
@@ -106,7 +111,7 @@ inline void PhysicalPoint::do_walls_collision() {
             else is_collised = false;
         }
         else {
-            float match_x = wll.x_by_y(pos.y);
+            const float match_x = wll.x_by_y(pos.y);
         
             if (!wll.out_of_p(vec2(match_x, pos.y)) and
                 ((wall_direct.y > 0 and pos.x > match_x and pos.x < match_x+wll.drop_zone) or 
@@ -119,7 +124,7 @@ inline void PhysicalPoint::do_walls_collision() {
         }
 
         if (is_collised) {
-            vec2 reflexed = vs::reflect(vel * jumpling, wll.normal);
+            const vec2 reflexed = vs::reflect(vel * jumpling, wll.normal);
 
             if (vs::length(reflexed) > 50) vel = reflexed;
             else vel = vs::zero;
@@ -137,10 +142,14 @@ inline void PhysicalPoint::do_walls_collision() {
     }
 }
 
+void PhysicalPoint::add_force(vec2 f) { addf += f; }
+
+void PhysicalPoint::add_wall(Wall* wall) { walls.push_back(wall); }
+
 // Drawing
 
-void PhysicalPoint::draw(float r=3) {
-    ff::easy_circle(pos, r, *window, color);
+void PhysicalPoint::draw(float radius=3) {
+    ff::easy_circle(pos, radius, *window, color);
 }
 
 void PhysicalPoint::show_av() {
