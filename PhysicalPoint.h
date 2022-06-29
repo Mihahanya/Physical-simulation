@@ -119,8 +119,8 @@ inline void PhysicalPoint::do_walls_collision() {
 
             normal_force = wll.normal * vs::length(force-normal_force) * (1-friction);
 
-            if (i == 0) walls[0], walls[1] = walls[1], walls[0];
-            else if (i != 1) walls[1], walls[i] = walls[i], walls[1];
+            if (i == 0) std::swap(walls[0], walls[1]);
+            else if (i != 1) std::swap(walls[1], walls[i]);
 
             return;
         }

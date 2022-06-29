@@ -15,7 +15,7 @@ vector<PPoint> points_circle(int sides, float size, vec2 center) {
 int main()
 {
     RenderWindow window(sf::VideoMode(W, H), "Physical Simulation", Close | Titlebar);
-    //window.setFramerateLimit(100);
+    window.setFramerateLimit(100);
 
     vec2 center = vec2(W/2, H/2);
 

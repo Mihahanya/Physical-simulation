@@ -64,10 +64,8 @@ bool Wall::horizontal_ingress(vec2 p) {
 		   (!clockwise and p.x > match_x and p.x < match_x + drop_zone));
 }
 
-void Wall::draw_update(Color color=Color::Black) 
-{
+void Wall::draw_update(Color color=Color::Black) {
 	if (is_dynamic and (beg != old_beg or end != old_end)) init();
-
 	ff::easy_line(beg, end, *window);
 }
 
