@@ -1,6 +1,6 @@
 #pragma once
 
-#include "h.h"
+#include "config.h"
 
 class Direct
 {
@@ -24,6 +24,7 @@ protected:
 
 	void init_param();
 };
+
 
 Direct::Direct(vec2 ibeg, vec2 iend) : beg(ibeg), end(iend) {
 	init_param();
@@ -70,3 +71,5 @@ tuple<vec2, bool> Direct::cross(Direct dir) {
 inline bool Direct::out_of_x(float x) { return x < lx or x > rx; }
 inline bool Direct::out_of_y(float y) { return y < uy or y > dy; }
 inline bool Direct::out_of_p(vec2 v) { return out_of_x(v.x) or out_of_y(v.y); }
+
+

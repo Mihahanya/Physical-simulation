@@ -2,7 +2,7 @@
     "Version": "1.1",
     "Data": {
         "Source": "d:\\projects\\physic\\physical-simulation\\module.ixx",
-        "ProvidedModule": "Scene",
+        "ProvidedModule": "$safeitemname$",
         "ImportedModules": [],
         "ImportedHeaderUnits": []
     }

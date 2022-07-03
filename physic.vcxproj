@@ -159,7 +159,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Direct.h" />
-    <ClInclude Include="h.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="Drawable.h" />
+    <ClInclude Include="fs.h" />
+    <ClInclude Include="include.h" />
     <ClInclude Include="SoftBody.h" />
     <ClInclude Include="PhysicalPoint.h" />
     <ClInclude Include="Scene.h" />

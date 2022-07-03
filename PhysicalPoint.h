@@ -1,6 +1,7 @@
 #pragma once
 
-#include "h.h"
+#include "config.h"
+#include "fs.h"
 #include "Wall.h"
 
 class PhysicalPoint;
@@ -76,8 +77,10 @@ void PhysicalPoint::update(float delta_time) {
 }
 
 inline void PhysicalPoint::do_walls_collision() {
-    for (auto i=0; i < walls.size(); i++) {
-        Wall wll = *walls[i];
+    for (auto i=0; i < walls.size(); i++) 
+    {
+        const WallOrient wall_orient = walls[i]->orient;
+        const vec2 wall_normal = walls[i]->normal;
 
         /*Direct temp(prev_pos, pos);
         vec2 dir = temp.direction == vs::zero ? -vs::norm(GRAVITY) : temp.direction;
@@ -96,28 +99,28 @@ inline void PhysicalPoint::do_walls_collision() {
             break;
         }*/
 
-        if (wll.orient == Vertical) {        
-            if (wll.vertical_ingress(pos)) {
+        if (wall_orient == Vertical) {
+            if (walls[i]->vertical_ingress(pos)) {
                 is_collised = true;
-                pos.y = wll.y_by_x(pos.x);
+                pos.y = walls[i]->y_by_x(pos.x);
             }
             else is_collised = false;
         }
-        else if (wll.orient == Horizontal) {
-            if (wll.horizontal_ingress(pos)) {
+        else if (wall_orient == Horizontal) {
+            if (walls[i]->horizontal_ingress(pos)) {
                 is_collised = true;
-                pos.x = wll.x_by_y(pos.y);
+                pos.x = walls[i]->x_by_y(pos.y);
             }
             else is_collised = false;
         }
 
         if (is_collised) {
-            const vec2 reflexed = vs::reflect(vel * jumpling, wll.normal);
+            const vec2 reflexed = vs::reflect(vel * jumpling, wall_normal);
 
             if (vs::length(reflexed) > 50) vel = reflexed;
             else vel = vs::zero;
 
-            normal_force = wll.normal * vs::length(force-normal_force) * (1-friction);
+            normal_force = wall_normal * vs::length(force-normal_force) * (1-friction);
 
             if (i == 0) std::swap(walls[0], walls[1]);
             else if (i != 1) std::swap(walls[1], walls[i]);
