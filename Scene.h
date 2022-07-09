@@ -75,8 +75,12 @@ inline float Scene::median(float a, float b, float c) {
 
 void Scene::update() {
 	delta_time = delta_clock.restart().asSeconds();
-	//float dt = stabilize_dt(delta_time);
-	float dt = 1./100;
+
+#if FPS > 0
+	float dt = 1./FPS;
+#else
+	float dt = stabilize_dt(delta_time);
+#endif
 
 	if (pause) return;
 

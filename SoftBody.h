@@ -130,4 +130,3 @@ void SoftContour::add_force(vec2 f) {
     for (PPoint &p : points)
         p.add_force(f);
 }
-
