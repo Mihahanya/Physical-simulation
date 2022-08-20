@@ -18,11 +18,12 @@ public:
 
 	Wall(vec2 ibeg, vec2 iend, bool is_dynamic);
 
-	void draw_update(Color);
-	void show_normals();
+	void draw_update();
+	void draw() const override;
+	void show_normals() const;
 
-	bool vertical_ingress(vec2);
-	bool horizontal_ingress(vec2);
+	bool vertical_ingress(vec2) const;
+	bool horizontal_ingress(vec2) const;
 
 private:
 	bool is_dynamic;
@@ -32,7 +33,7 @@ private:
 };
 
 
-Wall::Wall(vec2 ibeg, vec2 iend, bool is_dynamic=false) : Direct(ibeg, iend), is_dynamic(is_dynamic) {
+Wall::Wall(vec2 ibeg, vec2 iend, bool is_dynamic=false) : Direct{ibeg, iend}, Drawable{}, is_dynamic{is_dynamic} {
 	init();
 }
 
@@ -48,7 +49,7 @@ void Wall::init() {
     else if (orient == Horizontal) clockwise = direction.y < 0;
 }
 
-bool Wall::vertical_ingress(vec2 p) {
+bool Wall::vertical_ingress(vec2 p) const {
 	const float match_y = y_by_x(p.x);
 
 	return !out_of_p(vec2(p.x, match_y)) and
@@ -56,7 +57,7 @@ bool Wall::vertical_ingress(vec2 p) {
 		   (!clockwise and p.y < match_y and p.y > match_y - drop_zone));
 }
 
-bool Wall::horizontal_ingress(vec2 p) {
+bool Wall::horizontal_ingress(vec2 p) const {
 	const float match_x = x_by_y(p.y);
 
 	return !out_of_p(vec2(match_x, p.y)) and
@@ -64,23 +65,27 @@ bool Wall::horizontal_ingress(vec2 p) {
 		   (!clockwise and p.x > match_x and p.x < match_x + drop_zone));
 }
 
-void Wall::draw_update(Color color=Color::Black) {
+void Wall::draw_update() {
 	if (is_dynamic and (beg != old_beg or end != old_end)) init();
-	ff::easy_line(beg, end, *window);
+	draw();
 }
 
-void Wall::show_normals() {
+void Wall::draw() const {
+	ff::easy_line(beg, end, *window, color);
+}
+
+void Wall::show_normals() const {
 	const vec2 mid = (beg + end) / 2.f;
 	ff::easy_line(mid + normal * 10.f, mid, *window, Color(255, 0, 255));
 
-	vec2 drop;
+	vec2 drop{};
 	if (orient == Vertical) {
-		if (clockwise) drop = vec2(0, 1);
-		else drop = vec2(0, -1);
+		if (clockwise) drop = vec2{0, 1};
+		else drop = vec2{0, -1};
 	}
 	else if (orient == Horizontal) {
-		if (clockwise) drop = vec2(-1, 0);
-		else drop = vec2(1, 0);
+		if (clockwise) drop = vec2{-1, 0};
+		else drop = vec2{1, 0};
 	}
 	ff::easy_line(mid + drop*drop_zone, mid, *window, Color(0, 255, 0));
 }

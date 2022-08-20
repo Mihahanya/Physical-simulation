@@ -17,9 +17,9 @@ private:
 };
 
 
-VolumetricWall::VolumetricWall(vec2 pos, vec2 sizes, float angle) : pos(pos), sizes(sizes), angle(angle)
+VolumetricWall::VolumetricWall(vec2 pos, vec2 sizes, float angle) : pos{pos}, sizes{sizes}, angle{angle}
 {
-	vector<vec2> ps = {
+	vector<vec2> ps {
 		pos + vs::rotate(vec2(sizes.x, sizes.y), angle) / 2.f,
 		pos + vs::rotate(vec2(-sizes.x, sizes.y), angle) / 2.f,
 		pos + vs::rotate(vec2(-sizes.x, -sizes.y), angle) / 2.f,

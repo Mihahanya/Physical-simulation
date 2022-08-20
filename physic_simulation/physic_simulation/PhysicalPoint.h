@@ -6,7 +6,7 @@
 
 class PhysicalPoint;
 
-typedef PhysicalPoint PPoint;
+using PPoint = PhysicalPoint;
 
 class PhysicalPoint : public Drawable
 {
@@ -20,21 +20,21 @@ public:
     
     bool is_static = false, 
          is_collised = false;
-    
-    Color color = Color::Black;
 
     
     PhysicalPoint();
     PhysicalPoint(float mass, float jumpling, float friction, Color color);
-    
+    ~PhysicalPoint();
+
     void update(float delta_time);
 
     void add_force(vec2);
     
     void add_wall(Wall*);
     
-    void draw(float radius);
-    void show_av();
+    void draw() const override;
+    void drawr(float rad) const;
+    void show_av() const;
 
 private:
     vector<Wall*> walls{};
@@ -44,7 +44,7 @@ private:
          normal_force = vs::zero,
          prev_pos = vs::zero;
 
-    inline void do_walls_collision();
+    void do_walls_collision();
 };
 
 // Constructors
@@ -54,9 +54,14 @@ PhysicalPoint::PhysicalPoint() {
 }
 
 PhysicalPoint::PhysicalPoint(float mass, float jumpling, float friction, Color color=Color::Black) :
-    mass(mass), jumpling(jumpling), friction(friction), color(color)
+    mass{mass}, jumpling{jumpling}, friction{friction}, Drawable{color} 
 {
     gravity_force = GRAVITY * mass;
+}
+
+PhysicalPoint::~PhysicalPoint() {
+    /*for (auto p : walls) delete p;
+    walls.clear();*/
 }
 
 // Simulation
@@ -137,11 +142,15 @@ void PhysicalPoint::add_wall(Wall* wall) { walls.push_back(wall); }
 
 // Drawing
 
-void PhysicalPoint::draw(float radius=3) {
-    ff::easy_circle(pos, radius, *window, color);
+void PhysicalPoint::draw() const {
+    drawr(3);
 }
 
-void PhysicalPoint::show_av() {
+void PhysicalPoint::drawr(float rad) const {
+    ff::easy_circle(pos, rad, *window, color);
+}
+
+void PhysicalPoint::show_av() const {
     ff::easy_line(pos, prev_pos, *window, Color::Cyan);
     ff::easy_line(pos, pos+vs::norm(vel)*20.f, *window, Color(0, 0, 255, 120));
     ff::easy_line(pos, pos+vs::norm(force)*10.f, *window, Color::Red);

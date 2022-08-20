@@ -4,42 +4,42 @@
 
 namespace vs
 {
-    vec2 zero = vec2(0, 0);
+    const vec2 zero {0, 0};
 
-    inline float dist(vec2 v1, vec2 v2) {
+    inline float dist(const vec2& v1, const vec2& v2) {
         return sqrt(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2));
     }
 
-    inline float length(vec2 v) {
+    inline float length(const vec2& v) {
         return dist(zero, v);
     }
 
-    inline float dot(vec2 a, vec2 b) {
+    inline float dot(const vec2& a, const vec2& b) {
         return a.x * b.x + a.y * b.y;
     }
 
-    inline vec2 norm(vec2 v) {
+    inline vec2 norm(const vec2& v) {
         return v / dist(vs::zero, v);
     }
 
-    inline vec2 reflect(vec2 rd, vec2 n) {
+    inline vec2 reflect(const vec2& rd, const vec2& n) {
         return rd - n * 2.f * dot(n, rd);
     }
 
-    inline vec2 rotate(vec2 v, float a) {
+    inline vec2 rotate(const vec2& v, float a) {
         return { v.x * cos(a) - v.y * sin(a), v.x * sin(a) + v.y * cos(a) };
     }
 }
 
 namespace ff
 {
-    inline void easy_line(vec2 v1, vec2 v2, RenderWindow& window, Color color = Color::Black) {
+    inline void easy_line(const vec2& v1, const vec2& v2, RenderWindow& window, Color color = Color::Black) {
         Vertex vtx[] = { Vertex(v1), Vertex(v2) };
         vtx[0].color = vtx[1].color = color;
         window.draw(vtx, 2, LinesStrip);
     }
 
-    inline void easy_circle(vec2 pos, float r, RenderWindow& window, Color color = Color::Black) {
+    inline void easy_circle(const vec2& pos, float r, RenderWindow& window, Color color = Color::Black) {
         sf::CircleShape c(r);
         c.setFillColor(color);
         c.setPosition(vec2(pos - vec2(r, r)));

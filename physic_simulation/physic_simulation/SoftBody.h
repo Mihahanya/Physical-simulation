@@ -19,11 +19,11 @@ public:
 
     void add_wall(Wall*);
 
-    void draw(Color);
-    void show_av();
-    void show_dots(float radius);
+    void draw() const override;
+    void show_av() const;
+    void show_dots(float radius) const;
 
-    void set_window(RenderWindow*);
+    void set_window(RenderWindow*) override;
 
 private:
     PPoint central_point {1, 0, 0};
@@ -92,7 +92,7 @@ void SoftContour::update(float delta_time) {
 }
 
 // Drawing
-void SoftContour::draw(Color color=Color::Black) {
+void SoftContour::draw() const {
     vector<Vertex> vtx; 
     for (int i = 0; i <= points.size(); i++) {
         vtx.push_back(points[(i == points.size()) ? 0 : i].pos);
@@ -102,13 +102,13 @@ void SoftContour::draw(Color color=Color::Black) {
     (*window).draw(arrvtx, points.size()+1, LinesStrip);
 }
 
-void SoftContour::show_av() {
+void SoftContour::show_av() const {
     for (PPoint p : points) p.show_av();
     ff::easy_line(obj_center, obj_center + vs::norm(obj_velocity)*30.f, *window, Color::Blue);
 }
 
-void SoftContour::show_dots(float radius) {
-    for (PPoint p : points) p.draw(radius);
+void SoftContour::show_dots(float radius) const {
+    for (PPoint p : points) p.drawr(radius);
     ff::easy_circle(obj_center, radius, *window);
 }
 

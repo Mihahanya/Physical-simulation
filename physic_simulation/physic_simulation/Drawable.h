@@ -4,10 +4,17 @@
 
 class Drawable {
 public:
-    void set_window(RenderWindow* window) {
+    Color color = Color::Black;
+
+    Drawable() {}
+    Drawable(Color color) : color{color} {}
+
+    virtual void draw() const = 0;
+
+    virtual void set_window(RenderWindow* window) {
         this->window = window;
     }
 
 protected:
-    RenderWindow* window = nullptr;
+    RenderWindow* window {nullptr};
 };

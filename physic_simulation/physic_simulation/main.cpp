@@ -24,8 +24,6 @@ int main()
 
     Scene scene(&window);
 
-    bool is_focuse = true;
-
     /// Game objects
 
     float mass=1, jumpling=0.1, friction=1, elastic=20, resistance=0.5, connection_by_dist=1./100;
@@ -57,24 +55,8 @@ int main()
 
     /// Main cycle ///
 
-    while (window.isOpen())
+    main_loop([&]
     {
-        if (Keyboard::isKeyPressed(Keyboard::P)) scene.pause = true;
-        else scene.pause = false; 
-
-        Event e;
-        while (window.pollEvent(e)) {
-            if (e.type == Event::Closed) window.close();
-            
-            if (e.type == Event::LostFocus) is_focuse = false;
-            if (e.type == Event::GainedFocus) is_focuse = true;
-        }
-        if (!is_focuse) scene.pause = true;
-
-        window.clear(Color::White);
-
-        //
-        
         if (Keyboard::isKeyPressed(Keyboard::Q)) {
             for (SoftContour *p : scene.bodys) (*p).show_av();
             for (PPoint *p : scene.points) (*p).show_av();
@@ -97,15 +79,8 @@ int main()
             vw.move_to((vec2)Mouse::getPosition(window));
         }
         
-        cout << "FPS: " << round(1/scene.delta_time * 10)/10 << "    \r";
-
-        //
-
-        scene.draw();
-        scene.update();
-
-        window.display();
-    }
+        cout << "FPS: " << round(1/scene.delta_time * 10)/10 << " \r";
+    }, scene);
 
     return 0;
 }

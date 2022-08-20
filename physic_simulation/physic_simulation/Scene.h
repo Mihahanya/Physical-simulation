@@ -3,6 +3,11 @@
 #include "SoftBody.h"
 #include "PhysicalPoint.h"
 #include "VolumetricWall.h"
+#include <functional>
+
+class Scene;
+
+void main_loop(auto, Scene&);
 
 class Scene
 {
@@ -10,10 +15,11 @@ public:
 	vector<SoftContour*> bodys{};
 	vector<PPoint*> points{};
 	vector<Wall*> walls{};
-	float delta_time;
+	float delta_time = 0.01;
 	bool pause = false;
 
 	Scene(RenderWindow* window);
+	~Scene();
 
 	void add(PPoint&);
 	void add(Wall&);
@@ -23,16 +29,27 @@ public:
 	void update();
 	void draw();
 
+	friend void main_loop(auto, Scene&);
+
 private:
 	RenderWindow *window = nullptr;
-    sf::Clock delta_clock;
+	sf::Clock delta_clock{};
 
 	float stabilize_dt(float new_dt);
 	static float median(float, float, float);
 };
 
 
-Scene::Scene(RenderWindow* window) : window(window) {}
+Scene::Scene(RenderWindow* window) : window{window} {}
+
+Scene::~Scene() {
+	/*for (auto p : points) delete p;
+	points.clear();
+	for (auto p : bodys) delete p;
+	bodys.clear();
+	for (auto p : walls) delete p;
+	walls.clear();*/
+}
 
 void Scene::add(PPoint& p) {
 	p.set_window(window);
@@ -92,4 +109,31 @@ void Scene::draw() {
 	for (Wall* w : walls) (*w).draw_update();
 	for (PPoint* p : points) (*p).draw();
 	for (SoftContour* b : bodys) (*b).draw();
+}
+
+void main_loop(auto main, Scene& scene) {
+	bool is_focuse = true;
+	while (scene.window->isOpen())
+	{
+		if (Keyboard::isKeyPressed(Keyboard::P)) scene.pause = true;
+		else scene.pause = false;
+
+		Event e;
+		while (scene.window->pollEvent(e)) {
+			if (e.type == Event::Closed) scene.window->close();
+
+			if (e.type == Event::LostFocus) is_focuse = false;
+			if (e.type == Event::GainedFocus) is_focuse = true;
+		}
+		if (!is_focuse) continue;
+
+		scene.window->clear(Color::White);
+
+		main(); 
+
+		scene.draw();
+		scene.update();
+
+		scene.window->display();
+	}
 }
