@@ -1,38 +1,30 @@
 #pragma once
 
-#include "config.h"
-#include "fs.h"
+#include "PhysicalObject.h"
 #include "Wall.h"
 
 class PhysicalPoint;
 
 using PPoint = PhysicalPoint;
 
-class PhysicalPoint : public Drawable
+class PhysicalPoint : public PhysicalObject, public Drawable
 {
 public:
-    vec2 vel = vs::zero, 
-         pos = vs::zero;
-
-    float mass = 1, 
-          jumpling = 0.9, 
-          friction = 0.5;
-    
-    bool is_static = false, 
-         is_collised = false;
-
+    bool is_collised = false;
     
     PhysicalPoint();
-    PhysicalPoint(float mass, float jumpling, float friction, Color color);
+    PhysicalPoint(float mass, float bounciness, float friction, Color color);
     ~PhysicalPoint();
 
-    void update(float delta_time);
-
-    void add_force(vec2);
+    void update(float delta_time) override;
     
+    void add_force(vec2);
+    void set_force(vec2);
+    vec2 get_force() const;
+
     void add_wall(Wall*);
     
-    void draw() const override;
+    void draw() override;
     void drawr(float rad) const;
     void show_av() const;
 
@@ -53,8 +45,8 @@ PhysicalPoint::PhysicalPoint() {
     gravity_force = GRAVITY * mass;
 }
 
-PhysicalPoint::PhysicalPoint(float mass, float jumpling, float friction, Color color=Color::Black) :
-    mass{mass}, jumpling{jumpling}, friction{friction}, Drawable{color} 
+PhysicalPoint::PhysicalPoint(float mass, float bounciness, float friction, Color color=Color::Black) :
+    PhysicalObject{mass, bounciness, friction}, Drawable{color} 
 {
     gravity_force = GRAVITY * mass;
 }
@@ -96,7 +88,7 @@ inline void PhysicalPoint::do_walls_collision() {
 
         if (contact or vel == vs::zero) {
             pos = cross;
-            vec2 reflected_vel = vs::reflect(vel * jumpling, wll.normal);
+            vec2 reflected_vel = vs::reflect(vel * bounciness, wll.normal);
             
             if (vs::dist(vs::zero, reflected_vel) > 50) vel = reflected_vel;
             else vel = vs::zero;
@@ -120,7 +112,7 @@ inline void PhysicalPoint::do_walls_collision() {
         }
 
         if (is_collised) {
-            const vec2 reflexed = vs::reflect(vel * jumpling, wall_normal);
+            const vec2 reflexed = vs::reflect(vel * bounciness, wall_normal);
 
             if (vs::length(reflexed) > 50) vel = reflexed;
             else vel = vs::zero;
@@ -137,12 +129,14 @@ inline void PhysicalPoint::do_walls_collision() {
 }
 
 void PhysicalPoint::add_force(vec2 f) { addf += f; }
+void PhysicalPoint::set_force(vec2 f) { force = f; }
+vec2 PhysicalPoint::get_force() const { return force; }
 
 void PhysicalPoint::add_wall(Wall* wall) { walls.push_back(wall); }
 
 // Drawing
 
-void PhysicalPoint::draw() const {
+void PhysicalPoint::draw() {
     drawr(3);
 }
 

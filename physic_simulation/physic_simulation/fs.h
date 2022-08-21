@@ -1,6 +1,7 @@
 #pragma once
 
 #include "config.h"
+#include "Drawable.h"
 
 namespace vs
 {
@@ -46,6 +47,19 @@ namespace ff
 
         window.draw(c);
     }
+
+    class FixedLine : Drawable {
+    public:
+        vec2 *p1, *p2;
+
+        FixedLine(vec2 *p1, vec2 *p2, RenderWindow* window, Color col=Color::Black) : Drawable{col}, p1{p1}, p2{p2} {
+            set_window(window);
+        }
+
+        void draw() {
+            ff::easy_line(*p1, *p2, *window, color);
+        }
+    };
 }
 
 Color HSVtoRGB(int hue, float sat, float val)

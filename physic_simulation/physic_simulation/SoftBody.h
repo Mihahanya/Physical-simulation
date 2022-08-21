@@ -1,132 +1,73 @@
 #pragma once
 
-#include "Spring.h"
+#include "SoftBodyObject.h"
+#include "fs.h"
 
-class SoftContour : public Drawable
-{
+class SoftBody : public SoftBodyObject {
 public:
-    vector<PPoint> points{};
-    float mass, jumpling, friction, elasticity, resistance, connection_by_dist;
-    vec2 obj_center, obj_velocity;
+    vector<vector<PPoint>> points;
 
-    SoftContour(float mass, float jumpling, float friction, float elasticity, float resistance, float connection_by_dist);
+    SoftBody(float mass, float bounciness, float friction, float elasticity, float resistance);
 
-    void create_regular_polygon(vec2 cntr, int sides_n, float radius);
-    void create_custom_polygon(vector<vec2> crnrs);
+    void create_figure(const vec2& pos, int w, int h, float step);
 
-    void update(float delta_time);
-    void add_force(vec2);
-
-    void add_wall(Wall*);
-
-    void draw() const override;
-    void show_av() const;
-    void show_dots(float radius) const;
-
-    void set_window(RenderWindow*) override;
-
+    void draw() override;
+    
 private:
-    PPoint central_point {1, 0, 0};
-    vector<Spring> springs{};
+    vector<ff::FixedLine> lines;
 
-    void take_arms();
+    void take_arms() override;
 };
 
 // Constructors 
 
-SoftContour::SoftContour(float mass, float jumpling, float friction, float elasticity, float resistance, float connection_by_dist) :
-    mass(mass), jumpling(jumpling), friction(friction), elasticity(elasticity), resistance(resistance), connection_by_dist(connection_by_dist)
-{
-    central_point.is_static = true;
-}
-
-// Creating
-void SoftContour::create_regular_polygon(vec2 cntr, int sides_n, float radius)
-{
-    for (float a=0; (a < PI*2) and (points.size() < sides_n); a+=PI*2.f/ sides_n)
-    {
-        PPoint p(mass, jumpling, friction); 
-        p.pos = cntr + vec2(cos(a), sin(a)) * radius;
-        points.push_back(p);
-
-        central_point.pos += p.pos / (float)sides_n;
-    }
-    take_arms();
-}
-
-void SoftContour::create_custom_polygon(vector<vec2> crnrs) {
-    for (auto t : crnrs) 
-    {
-        PPoint p(mass, jumpling, friction); p.pos = t;
-        points.push_back(p);
-
-        central_point.pos += p.pos / (float)crnrs.size();
-    }
-    take_arms();
-}
-
-void SoftContour::add_wall(Wall* wall) {
-    for (PPoint& p : points) p.add_wall(wall);
-}
-
-void SoftContour::set_window(RenderWindow* window) {
-    this->window = window;
-    for (PPoint& p : points) p.set_window(window);
-}
-
-// Simulation
-void SoftContour::update(float delta_time) {
-    obj_center = obj_velocity = vs::zero;
-    
-    for (Spring &s : springs) s.calculate_force();
-    for (Spring &s : springs) s.add_force();
-    
-    for (PPoint &p : points) {
-        p.update(delta_time);
-
-        obj_center += p.pos / (float)points.size();
-        obj_velocity += p.vel / (float)points.size();
-    }
-
-    central_point.pos = obj_center;
-}
+SoftBody::SoftBody(float mass, float bounciness, float friction, float elasticity, float resistance) :
+    SoftBodyObject{mass, bounciness, friction, elasticity, resistance} {}
 
 // Drawing
-void SoftContour::draw() const {
-    vector<Vertex> vtx; 
-    for (int i = 0; i <= points.size(); i++) {
-        vtx.push_back(points[(i == points.size()) ? 0 : i].pos);
-        vtx[i].color = color;
-    }
-    Vertex *arrvtx = &vtx[0];
-    (*window).draw(arrvtx, points.size()+1, LinesStrip);
+void SoftBody::draw() {
+    for (auto& l : lines) l.draw();
 }
 
-void SoftContour::show_av() const {
-    for (PPoint p : points) p.show_av();
-    ff::easy_line(obj_center, obj_center + vs::norm(obj_velocity)*30.f, *window, Color::Blue);
-}
-
-void SoftContour::show_dots(float radius) const {
-    for (PPoint p : points) p.drawr(radius);
-    ff::easy_circle(obj_center, radius, *window);
-}
 
 // Taking arm connections
-inline void SoftContour::take_arms() 
-{
-    float elas_norm = elasticity / (float)points.size();
 
-    for (int i = 0; i < points.size(); i++) {
-        for (int j = i+1; j<points.size(); j++) {
-            Spring s(&points[i], &points[j], elas_norm/(vs::dist(points[i].pos, points[j].pos)*connection_by_dist), resistance);
-            springs.push_back(s);
+inline void SoftBody::take_arms() {
+    const static int fasteners[4][2] = { {1, 0}, {1, -1}, {0, -1}, {-1, -1} };
+    size_t h=points.size(), w=points[0].size();
+    for (int i=0; i<h; i++) {
+        for (int j=0; j<w; j++) {
+            for (const auto& fst : fasteners) {
+                int ii=i+fst[1], jj=j+fst[0];
+                if (ii >= 0 and ii < h and jj >= 0 and jj < w) {
+                    Spring s(&points[i][j], &points[ii][jj], elasticity, resistance);
+                    springs.push_back(s);
+
+                    ff::FixedLine l(points[i][j].get_pos_ptr(), points[ii][jj].get_pos_ptr(), window, color);
+                    lines.push_back(l);
+                }
+            }
         }
     }
 }
 
-// Moving
-void SoftContour::add_force(vec2 f) {
-    for (PPoint &p : points)
-        p.add_force(f);
+// Creating
+
+void SoftBody::create_figure(const vec2& pos, int w, int h, float step) {
+    this->pos = pos;
+    for (int i=0; i<h; i++) {
+        vector<PPoint> l{};
+        for (int j=0; j<w; j++) {
+            PPoint p(mass, bounciness, friction);
+
+            float x = (j-(float)(w-1)/2.)*step;
+            float y = (i-(float)(h-1)/2.)*step;
+            p.set_pos(pos + vec2{x, y});
+
+            l.push_back(p);
+        }
+        points.push_back(l);
+    }
+    take_arms();
 }
+

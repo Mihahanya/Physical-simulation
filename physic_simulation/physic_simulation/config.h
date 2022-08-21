@@ -3,7 +3,7 @@
 #include "include.h"
 #include "Drawable.h"
 
-typedef Vector2f vec2;
+using vec2 = Vector2f;
 
 const vec2 GRAVITY {0, 1000};
 

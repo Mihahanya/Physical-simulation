@@ -9,7 +9,7 @@ public:
     Drawable() {}
     Drawable(Color color) : color{color} {}
 
-    virtual void draw() const = 0;
+    virtual void draw() = 0;
 
     virtual void set_window(RenderWindow* window) {
         this->window = window;

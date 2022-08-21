@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SoftBody.h"
+#include "SoftContour.h"
 #include "PhysicalPoint.h"
 #include "VolumetricWall.h"
 #include <functional>
@@ -9,10 +10,10 @@ class Scene;
 
 void main_loop(auto, Scene&);
 
-class Scene
-{
+class Scene : public Drawable {
 public:
-	vector<SoftContour*> bodys{};
+	vector<SoftBody*> sbodys{};
+	vector<SoftContour*> contours{};
 	vector<PPoint*> points{};
 	vector<Wall*> walls{};
 	float delta_time = 0.01;
@@ -25,14 +26,14 @@ public:
 	void add(Wall&);
 	void add(VolumetricWall&);
 	void add(SoftContour&);
+	void add(SoftBody&);
 
 	void update();
-	void draw();
+	void draw() override;
 
 	friend void main_loop(auto, Scene&);
 
 private:
-	RenderWindow *window = nullptr;
 	sf::Clock delta_clock{};
 
 	float stabilize_dt(float new_dt);
@@ -40,13 +41,16 @@ private:
 };
 
 
-Scene::Scene(RenderWindow* window) : window{window} {}
+Scene::Scene(RenderWindow* window) {
+	set_window(window);
+	color = Color::White;
+}
 
 Scene::~Scene() {
 	/*for (auto p : points) delete p;
 	points.clear();
-	for (auto p : bodys) delete p;
-	bodys.clear();
+	for (auto p : contours) delete p;
+	contours.clear();
 	for (auto p : walls) delete p;
 	walls.clear();*/
 }
@@ -58,23 +62,31 @@ void Scene::add(PPoint& p) {
 	points.push_back(&p);
 }
 
+void Scene::add(SoftContour& sc) {
+	sc.set_window(window);
+	for (Wall* w : walls) sc.add_wall(w);
+
+	contours.push_back(&sc);
+}
+
+void Scene::add(SoftBody& sb) {
+	sb.set_window(window);
+	for (Wall* w : walls) sb.add_wall(w);
+
+	sbodys.push_back(&sb);
+}
+
 void Scene::add(Wall& w) {
 	w.set_window(window);
-	for (PPoint* p : points) (*p).add_wall(&w);
-	for (SoftContour* p : bodys) (*p).add_wall(&w);
+	for (auto p : points) (*p).add_wall(&w);
+	for (auto p : contours) (*p).add_wall(&w);
+	for (auto p : sbodys) (*p).add_wall(&w);
 
 	walls.push_back(&w);
 }
 
 void Scene::add(VolumetricWall& obj) {
 	for (Wall& w : obj.walls) add(w);
-}
-
-void Scene::add(SoftContour& sc) {
-	sc.set_window(window);
-	for (Wall* w : walls) sc.add_wall(w);
-
-	bodys.push_back(&sc);
 }
 
 float Scene::stabilize_dt(float new_dt) {
@@ -101,14 +113,16 @@ void Scene::update() {
 
 	if (pause) return;
 
-	for (PPoint* p : points) (*p).update(dt);
-	for (SoftContour* p : bodys) (*p).update(dt);
+	for (auto p : points) (*p).update(dt);
+	for (auto p : contours) (*p).update(dt);
+	for (auto p : sbodys) (*p).update(dt);
 }
 
 void Scene::draw() {
-	for (Wall* w : walls) (*w).draw_update();
-	for (PPoint* p : points) (*p).draw();
-	for (SoftContour* b : bodys) (*b).draw();
+	for (auto w : walls) (*w).draw_update();
+	for (auto p : points) (*p).draw();
+	for (auto b : contours) (*b).draw();
+	for (auto b : sbodys) (*b).draw();
 }
 
 void main_loop(auto main, Scene& scene) {
@@ -127,7 +141,7 @@ void main_loop(auto main, Scene& scene) {
 		}
 		if (!is_focuse) continue;
 
-		scene.window->clear(Color::White);
+		scene.window->clear(scene.color);
 
 		main(); 
 

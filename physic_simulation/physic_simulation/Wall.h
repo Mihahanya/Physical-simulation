@@ -19,7 +19,7 @@ public:
 	Wall(vec2 ibeg, vec2 iend, bool is_dynamic);
 
 	void draw_update();
-	void draw() const override;
+	void draw() override;
 	void show_normals() const;
 
 	bool vertical_ingress(vec2) const;
@@ -70,7 +70,7 @@ void Wall::draw_update() {
 	draw();
 }
 
-void Wall::draw() const {
+void Wall::draw() {
 	ff::easy_line(beg, end, *window, color);
 }
 

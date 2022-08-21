@@ -8,7 +8,7 @@ public:
 	vector<Wall> walls;
 	float angle;
 
-	VolumetricWall(vec2 pos, vec2 sizes, float angle);
+	VolumetricWall(vec2 pos, vec2 sizes, float angle, float drop_zone_k);
 
 	void move_to(vec2);
 
@@ -17,7 +17,7 @@ private:
 };
 
 
-VolumetricWall::VolumetricWall(vec2 pos, vec2 sizes, float angle) : pos{pos}, sizes{sizes}, angle{angle}
+VolumetricWall::VolumetricWall(vec2 pos, vec2 sizes, float angle, float drop_zone_k=1) : pos{pos}, sizes{sizes}, angle{angle}
 {
 	vector<vec2> ps {
 		pos + vs::rotate(vec2(sizes.x, sizes.y), angle) / 2.f,
@@ -33,6 +33,7 @@ VolumetricWall::VolumetricWall(vec2 pos, vec2 sizes, float angle) : pos{pos}, si
 	for (int i = 0; i < ps.size(); i++) {
 		Wall w(ps[i], ps[(i == ps.size() - 1) ? 0 : i + 1], true);
 		w.drop_zone = (i % 2 == 0) ? hdz : wdz;
+		w.drop_zone *= drop_zone_k;
 		walls.push_back(w);
 	}
 }

@@ -21,11 +21,11 @@ private:
 Spring::Spring(PPoint* p1, PPoint* p2, float elasticity, float resistance) :
 	p1{p1}, p2{p2}, elasticity{elasticity}, resistance{resistance}
 {
-	distance = vs::dist(p1->pos, p2->pos);
+	distance = vs::dist(p1->get_pos(), p2->get_pos());
 }
 
 void Spring::calculate_force() {
-	const vec2 v = (p2->pos - p1->pos) * (vs::dist(p1->pos, p2->pos) - distance);
+	const vec2 v = (p2->get_pos() - p1->get_pos()) * (vs::dist(p1->get_pos(), p2->get_pos()) - distance);
 	const vec2 f_e = v * elasticity;
 
 	const vec2 fl = fluctuation * resistance;
