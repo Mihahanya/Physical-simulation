@@ -2,36 +2,46 @@
 
 #include "Spring.h"
 
-class SoftBodyObject : public PhysicalObject, public Drawable
+class SoftBodyObject : public PhysicalObject, public Spring, public Drawable
 {
 public:
     vector<PPoint> points{};
-    float elasticity, resistance;
 
     SoftBodyObject(float mass, float bounciness, float friction, float elasticity, float resistance);
 
-    void update(float delta_time) override;
+    virtual void update(float delta_time) override;
     
-    void add_force(vec2);
-    void set_pos(vec2) override;
-
     virtual void draw() = 0;
     void show_av() const;
     void show_dots(float radius) const;
 
     void add_wall(Wall*);
 
-    void set_window(RenderWindow*) override;
+    virtual void set_window(RenderWindow*) override;
+
+    void add_force(vec2);
+    void set_pos(vec2) override;
+    void set_vel(vec2) override;
+
+    void set_mass    (float) override;
+    void set_bounc   (float) override;
+    void set_friction(float) override;
+
+    void set_elasticity    (float) override;
+    void set_resistance    (float) override;
+    void set_distance      (float) override;
+    void set_max_force_dist(float) override;
 
 protected:
     vector<Spring> springs{};
 
     virtual void take_arms() = 0;
+    void calculate_force() override;
 };
 
 // Construction
 SoftBodyObject::SoftBodyObject(float mass, float bounciness, float friction, float elasticity, float resistance) :
-    PhysicalObject{ mass, bounciness, friction }, elasticity(elasticity), resistance(resistance) {}
+    PhysicalObject{mass, bounciness, friction}, Spring{elasticity, resistance} {}
 
 void SoftBodyObject::add_wall(Wall* wall) {
     for (PPoint& p : points) p.add_wall(wall);
@@ -46,7 +56,7 @@ void SoftBodyObject::set_window(RenderWindow* window) {
 void SoftBodyObject::update(float delta_time) {
     pos = vel = vs::zero;
 
-    for (Spring& s : springs) s.calculate_force();
+    calculate_force();
     for (Spring& s : springs) s.add_force();
 
     for (PPoint& p : points) {
@@ -55,6 +65,10 @@ void SoftBodyObject::update(float delta_time) {
         pos += p.get_pos() / (float)points.size();
         vel += p.get_vel() / (float)points.size();
     }
+}
+
+void SoftBodyObject::calculate_force() {
+    for (Spring& s : springs) s.calculate_force();
 }
 
 // Drawing
@@ -68,11 +82,17 @@ void SoftBodyObject::show_dots(float radius) const {
     ff::easy_circle(pos, radius, *window);
 }
 
-// Moving
-void SoftBodyObject::add_force(vec2 f) {
-    for (PPoint& p : points)
-        p.add_force(f);
-}
+// setter
+void SoftBodyObject::add_force(vec2 f)              { for (auto& p : points) p.add_force(f); }
+void SoftBodyObject::set_vel(vec2 vel)              { for (auto& p : points) p.set_vel(vel); }
+void SoftBodyObject::set_mass(float mass)           { for (auto& p : points) p.set_mass(mass); }
+void SoftBodyObject::set_bounc(float bounciness)    { for (auto& p : points) p.set_bounc(bounciness); }
+void SoftBodyObject::set_friction(float friction)   { for (auto& p : points) p.set_friction(friction); }
+
+void SoftBodyObject::set_elasticity(float el)       { for (auto& p : springs) p.set_elasticity(el);}
+void SoftBodyObject::set_resistance(float re)       { for (auto& p : springs) p.set_resistance(re);}
+void SoftBodyObject::set_distance(float d)          { for (auto& p : springs) p.set_distance(d);}
+void SoftBodyObject::set_max_force_dist(float mfd)  { for (auto& p : springs) p.set_max_force_dist(mfd); }
 
 void SoftBodyObject::set_pos(vec2 position) {
     for (auto& p : points) {
@@ -81,4 +101,3 @@ void SoftBodyObject::set_pos(vec2 position) {
     }
     pos = position;
 }
-

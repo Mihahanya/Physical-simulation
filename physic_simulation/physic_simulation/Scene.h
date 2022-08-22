@@ -16,7 +16,7 @@ public:
 	vector<SoftContour*> contours{};
 	vector<PPoint*> points{};
 	vector<Wall*> walls{};
-	float delta_time = 0.01;
+	float delta_time = 0.01; // ~ 100 fps
 	bool pause = false;
 
 	Scene(RenderWindow* window);
@@ -78,9 +78,9 @@ void Scene::add(SoftBody& sb) {
 
 void Scene::add(Wall& w) {
 	w.set_window(window);
-	for (auto p : points) (*p).add_wall(&w);
-	for (auto p : contours) (*p).add_wall(&w);
-	for (auto p : sbodys) (*p).add_wall(&w);
+	for (auto p : points) p->add_wall(&w);
+	for (auto p : contours) p->add_wall(&w);
+	for (auto p : sbodys) p->add_wall(&w);
 
 	walls.push_back(&w);
 }
@@ -113,16 +113,16 @@ void Scene::update() {
 
 	if (pause) return;
 
-	for (auto p : points) (*p).update(dt);
-	for (auto p : contours) (*p).update(dt);
-	for (auto p : sbodys) (*p).update(dt);
+	for (auto p : points) p->update(dt);
+	for (auto p : contours) p->update(dt);
+	for (auto p : sbodys) p->update(dt);
 }
 
 void Scene::draw() {
-	for (auto w : walls) (*w).draw_update();
-	for (auto p : points) (*p).draw();
-	for (auto b : contours) (*b).draw();
-	for (auto b : sbodys) (*b).draw();
+	for (auto w : walls) w->draw_update();
+	for (auto p : points) p->draw();
+	for (auto b : contours) b->draw();
+	for (auto b : sbodys) b->draw();
 }
 
 void main_loop(auto main, Scene& scene) {

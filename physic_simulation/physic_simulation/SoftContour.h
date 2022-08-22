@@ -41,7 +41,7 @@ inline void SoftContour::take_arms()
 
     for (int i = 0; i < points.size(); i++) {
         for (int j = i+1; j<points.size(); j++) {
-            Spring s(&points[i], &points[j], elas_norm/vs::dist(points[i].get_pos(), points[j].get_pos()), resistance);
+            Spring s(&points[i], &points[j], elas_norm/vs::dist(points[i].get_pos(), points[j].get_pos()), resistance, 100);
             springs.push_back(s);
         }
     }
@@ -50,6 +50,7 @@ inline void SoftContour::take_arms()
 // Creating
 
 void SoftContour::create_regular_polygon(vec2 cntr, int sides_n, float radius) {
+    points.clear();
     pos = cntr;
     for (float a=0; (a < PI*2) and (points.size() < sides_n); a+=PI*2.f/ sides_n)
     {
@@ -62,6 +63,7 @@ void SoftContour::create_regular_polygon(vec2 cntr, int sides_n, float radius) {
 
 void SoftContour::create_regular_polygon(vec2 cntr, int sides_n, float radius, vec2(*key)(float))
 {
+    points.clear();
     for (float a = 0; (a < PI * 2) and (points.size() < sides_n); a += PI * 2.f / sides_n)
     {
         PPoint p(mass, bounciness, friction);
@@ -74,6 +76,7 @@ void SoftContour::create_regular_polygon(vec2 cntr, int sides_n, float radius, v
 }
 
 void SoftContour::create_custom_polygon(vector<vec2> crnrs) {
+    points.clear();
     for (auto t : crnrs) {
         PPoint p(mass, bounciness, friction); p.set_pos(t);
         points.push_back(p);

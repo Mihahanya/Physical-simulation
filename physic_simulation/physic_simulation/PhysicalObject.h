@@ -18,13 +18,13 @@ public:
     virtual void set_pos(vec2 position) { pos = position; }
     virtual void set_vel(vec2 velocity) { vel = velocity; }
 
-    float get_mass() const { return mass; }
-    float get_bounc() const { return bounciness; }
+    float get_mass()     const { return mass; }
+    float get_bounc()    const { return bounciness; }
     float get_friction() const { return friction; }
     
-    void set_mass(float mass) { this->mass = mass; }
-    void set_bounc(float bounciness) { this->bounciness = bounciness; }
-    void set_friction(float friction) { this->friction = friction; }
+    virtual void set_mass(float mass) { this->mass = mass; }
+    virtual void set_bounc(float bounciness) { this->bounciness = bounciness; }
+    virtual void set_friction(float friction) { this->friction = friction; }
 
 protected:
     vec2 vel = vs::zero,

@@ -19,10 +19,10 @@ D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(
 D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(91,39): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(91,30): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\PhysicalObject.h(34,22): warning C4305: инициализация: усечение из "double" в "float"
-D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftBody.h(63,21): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftBody.h(64,21): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftContour.h(54,72): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
-D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftContour.h(65,81): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftBody.h(74,21): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftBody.h(75,21): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftContour.h(55,72): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftContour.h(67,81): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\Scene.h(19,19): warning C4305: инициализация: усечение из "double" в "float"
 D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\Scene.h(96,17): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\Scene.h(96,7): warning C4244: инициализация: преобразование "double" в "const float", возможна потеря данных
@@ -30,10 +30,11 @@ D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\Scene
 D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\main.cpp(7,64): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\main.cpp(8,49): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
 D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\main.cpp(8,58): warning C4305: аргумент: усечение из "double" в "float"
-D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\main.cpp(30,37): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\main.cpp(33,37): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\main.cpp(33,83): warning C4305: инициализация: усечение из "double" в "float"
   Создание кода
-  8 of 663 functions ( 1.2%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  2 of 616 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   physic_simulation.vcxproj -> D:\PROJECTS\physic\Physical-simulation\physic_simulation\x64\Release\physic_simulation.exe

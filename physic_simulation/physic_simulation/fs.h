@@ -37,7 +37,7 @@ namespace ff
     inline void easy_line(const vec2& v1, const vec2& v2, RenderWindow& window, Color color = Color::Black) {
         Vertex vtx[] = { Vertex(v1), Vertex(v2) };
         vtx[0].color = vtx[1].color = color;
-        window.draw(vtx, 2, LinesStrip);
+        window.draw(vtx, 2, Lines);
     }
 
     inline void easy_circle(const vec2& pos, float r, RenderWindow& window, Color color = Color::Black) {
@@ -48,7 +48,7 @@ namespace ff
         window.draw(c);
     }
 
-    class FixedLine : Drawable {
+    class FixedLine : public Drawable {
     public:
         vec2 *p1, *p2;
 
@@ -56,8 +56,8 @@ namespace ff
             set_window(window);
         }
 
-        void draw() {
-            ff::easy_line(*p1, *p2, *window, color);
+        void draw() override {
+            easy_line(*p1, *p2, *window, color);
         }
     };
 }

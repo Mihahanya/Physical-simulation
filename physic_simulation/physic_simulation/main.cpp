@@ -15,7 +15,10 @@ vector<PPoint> points_circle(int sides, float size, vec2 center) {
 
 int main()
 {
-    RenderWindow window(sf::VideoMode(W, H), "Physical Simulation", Close | Titlebar);
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 5;
+
+    RenderWindow window(sf::VideoMode(W, H), "Physical Simulation", Close | Titlebar, settings);
 
 #if FPS > 0
     window.setFramerateLimit(FPS);
@@ -27,10 +30,10 @@ int main()
 
     /// Game objects
 
-    float mass = 1, bounciness = 0.1, friction = 1, elastic = 30, resistance = 0.5;
+    float mass = 1, bounciness = 0.1, friction = 1, elastic = 30, resistance = 0.2;
     SoftBody fig(mass, bounciness, friction, elastic, resistance);
     
-    fig.create_figure(center, 10, 10, 10);
+    fig.create_figure(center, 5, 5, 30);
 
     scene.add(fig);
 
@@ -70,22 +73,23 @@ int main()
     main_loop([&]
     {
         if (Keyboard::isKeyPressed(Keyboard::Q)) {
-            for (auto p : scene.contours) p->show_av();
-            for (auto p : scene.sbodys) p->show_av();
-            for (auto p : scene.points) p->show_av();
-            for (auto w : scene.walls) w->show_normals();
+            for (auto& p : scene.contours) p->show_av();
+            for (auto& p : scene.sbodys)   p->show_av();
+            for (auto& p : scene.points)   p->show_av();
+            for (auto& w : scene.walls)    w->show_normals();
         }
         
         if (Mouse::isButtonPressed(Mouse::Left) and !scene.pause) {
+            PPoint& p = fig.points[0];
+
             vec2 m = (vec2)Mouse::getPosition(window);
-            vec2 p = m-fig.points[0][0].get_pos();
 
-            fig.points[0][0].add_force(p*300.f - fig.points[0][0].get_vel()*20.f);
+            p.add_force((m-p.get_pos())*300.f - p.get_vel()*20.f);
 
-            ff::easy_line(m, fig.points[0][0].get_pos(), window, Color::Green);
+            ff::easy_line(m, p.get_pos(), window, Color::Green);
         }
 
-        fig.show_dots(1);
+        fig.show_dots(2);
 
         /*if (Mouse::isButtonPressed(Mouse::Right)) {
             vw.angle += 0.01;
