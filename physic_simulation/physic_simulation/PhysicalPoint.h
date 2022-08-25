@@ -114,6 +114,7 @@ inline void PhysicalPoint::do_walls_collision() {
         if (is_collised) {
             const vec2 reflexed = vs::reflect(vel * bounciness, wall_normal);
 
+            //vel = reflexed;
             if (vs::length(reflexed) > 50) vel = reflexed;
             else vel = vs::zero;
 

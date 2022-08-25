@@ -37,7 +37,8 @@ void SoftContour::draw() {
 
 inline void SoftContour::take_arms() 
 {
-    float elas_norm = elasticity / (float)points.size();
+    float elas_norm = elasticity / (float)points.size(),
+          resi_norm = resistance / (float)points.size();
 
     for (int i = 0; i < points.size(); i++) {
         for (int j = i+1; j<points.size(); j++) {

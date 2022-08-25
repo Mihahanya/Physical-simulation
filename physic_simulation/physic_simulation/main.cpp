@@ -30,14 +30,15 @@ int main()
 
     /// Game objects
 
-    float mass = 1, bounciness = 0.1, friction = 1, elastic = 30, resistance = 0.2;
+    float mass = 1, bounciness = 0.1, friction = 1, elastic = 1000, resistance = 0.35;
     SoftBody fig(mass, bounciness, friction, elastic, resistance);
-    
-    fig.create_figure(center, 5, 5, 30);
+    fig.color = Color{0, 0, 0, 100};
+
+    fig.create_figure(center, 7, 6, 20);
 
     scene.add(fig);
 
-    //float mass=0.8, bounciness=0.1, friction=1, elastic=3000, resistance=0.5;
+    //float mass=0.8, bounciness=0.1, friction=1, elastic=1e5, resistance=0.45;
     //SoftContour fig(mass, bounciness, friction, elastic, resistance);
 
     //int cnt_of_sds = 50; float size=50;

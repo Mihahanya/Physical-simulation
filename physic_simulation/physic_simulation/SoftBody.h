@@ -40,7 +40,8 @@ void SoftBody::set_window(RenderWindow* window) {
 // Taking arm connections
 
 inline void SoftBody::take_arms() {
-    const static int fasteners[4][2] = { {1, 0}, {1, -1}, {0, -1}, {-1, -1} };
+    //const static int fasteners[4][2] = { {1, 0}, {1, -1}, {0, -1}, {-1, -1} };
+    const static int fasteners[8][2] = { {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-2, -1}, {-1, -2}, {1, -2}, {2, -1} };
     
     for (int i=0; i<h; i++) {
         for (int j=0; j<w; j++) {

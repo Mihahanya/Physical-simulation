@@ -30,7 +30,6 @@ public:
     void set_elasticity    (float) override;
     void set_resistance    (float) override;
     void set_distance      (float) override;
-    void set_max_force_dist(float) override;
 
 protected:
     vector<Spring> springs{};
@@ -92,7 +91,6 @@ void SoftBodyObject::set_friction(float friction)   { for (auto& p : points) p.s
 void SoftBodyObject::set_elasticity(float el)       { for (auto& p : springs) p.set_elasticity(el);}
 void SoftBodyObject::set_resistance(float re)       { for (auto& p : springs) p.set_resistance(re);}
 void SoftBodyObject::set_distance(float d)          { for (auto& p : springs) p.set_distance(d);}
-void SoftBodyObject::set_max_force_dist(float mfd)  { for (auto& p : springs) p.set_max_force_dist(mfd); }
 
 void SoftBodyObject::set_pos(vec2 position) {
     for (auto& p : points) {

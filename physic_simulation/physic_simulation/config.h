@@ -12,4 +12,4 @@ constexpr int H = 800;
 
 #define PI 3.14159265
 
-#define FPS 70
+#define FPS 100
