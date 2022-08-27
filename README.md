@@ -1,8 +1,8 @@
 # Physical-simulation
 Physical simulation of the behavior of objects of different shapes
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1661617759/video_to_markdown/images/youtube--cshnLpNyQ7s-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://youtu.be/cshnLpNyQ7s "")
+## Videos
 
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1649606164/video_to_markdown/images/youtube--YlrIHuyJcKw-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=YlrIHuyJcKw "")
-
-[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1649606192/video_to_markdown/images/youtube--odXnkh8TSQc-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=odXnkh8TSQc&t=11s "")
+[![Physical simulation of Soft Bodies (pt. 2) / C++ SFML](https://img.youtube.com/vi/cshnLpNyQ7s/mqdefault.jpg)](https://youtu.be/cshnLpNyQ7s "Physical simulation of Soft Bodies (pt. 2) / C++ SFML")
+[![Physical simulation of Soft Bodies (pt. 1) / C++ SFML](https://img.youtube.com/vi/YlrIHuyJcKw/mqdefault.jpg)](https://youtu.be/YlrIHuyJcKw "Physical simulation of Soft Bodies (pt. 1) / C++ SFML")
+[![Physical simulation of 1000 particles / C++ SFML](https://img.youtube.com/vi/odXnkh8TSQc/mqdefault.jpg)](https://youtu.be/odXnkh8TSQc "Physical simulation of 1000 particles / C++ SFML")
