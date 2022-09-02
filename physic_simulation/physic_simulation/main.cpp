@@ -30,21 +30,21 @@ int main()
 
     /// Game objects
 
-    float mass = 1, bounciness = 0.1, friction = 1, elastic = 1000, resistance = 0.35;
+    float mass = 0.85, bounciness = 0.1, friction = 1, elastic = 1500, resistance = 0.3;
     SoftBody fig(mass, bounciness, friction, elastic, resistance);
     fig.color = Color{0, 0, 0, 100};
 
-    fig.create_figure(center, 7, 6, 20);
+    fig.create_figure(center, 10, 7, 25);
 
     scene.add(fig);
 
-    //float mass=0.8, bounciness=0.1, friction=1, elastic=1e5, resistance=0.45;
+    //float mass=0.8, bounciness=0.1, friction=1, elastic=5e4, resistance=0.4;
     //SoftContour fig(mass, bounciness, friction, elastic, resistance);
 
     //int cnt_of_sds = 50; float size=50;
-    ////fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size);
+    //fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size);
     ////fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size, [](float a) { return vec2{sin(a*1.5f), cos(a-4.6f)}; });
-    //fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size, [](float t) { return vec2{cos(t), sin(t)}*(4+cos(t*5.f))/5.f; });
+    ////fig.create_regular_polygon(vec2(W/2+50, 200), cnt_of_sds, size, [](float t) { return vec2{cos(t), sin(t)}*(4+cos(t*5.f))/5.f; });
     ////fig.create_custom_polygon({ vec2(300, 200), vec2(280, 500), vec2(700, 500), vec2(400, 380) });
     //
     //scene.add(fig);
@@ -67,7 +67,7 @@ int main()
         w.drop_zone = 100;
         walls.push_back(w);
     }
-    for (Wall &w : walls) scene.add(w);
+    for (Wall& w : walls) scene.add(w);
 
     /// Main cycle ///
 
@@ -90,7 +90,7 @@ int main()
             ff::easy_line(m, p.get_pos(), window, Color::Green);
         }
 
-        fig.show_dots(2);
+        fig.show_dots(1);
 
         /*if (Mouse::isButtonPressed(Mouse::Right)) {
             vw.angle += 0.01;

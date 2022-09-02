@@ -51,10 +51,7 @@ PhysicalPoint::PhysicalPoint(float mass, float bounciness, float friction, Color
     gravity_force = GRAVITY * mass;
 }
 
-PhysicalPoint::~PhysicalPoint() {
-    /*for (auto p : walls) delete p;
-    walls.clear();*/
-}
+PhysicalPoint::~PhysicalPoint() {}
 
 // Simulation
 

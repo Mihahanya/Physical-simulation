@@ -7,7 +7,7 @@ using vec2 = Vector2f;
 
 const vec2 GRAVITY {0, 1000};
 
-constexpr int W = 800;
+constexpr int W = 1050;
 constexpr int H = 800;
 
 #define PI 3.14159265

@@ -46,14 +46,7 @@ Scene::Scene(RenderWindow* window) {
 	color = Color::White;
 }
 
-Scene::~Scene() {
-	/*for (auto p : points) delete p;
-	points.clear();
-	for (auto p : contours) delete p;
-	contours.clear();
-	for (auto p : walls) delete p;
-	walls.clear();*/
-}
+Scene::~Scene() {}
 
 void Scene::add(PPoint& p) {
 	p.set_window(window);

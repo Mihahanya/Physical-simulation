@@ -59,6 +59,8 @@ inline void SoftBody::take_arms() {
             }
         }
     }
+    springs.shrink_to_fit();
+    lines.shrink_to_fit();
 }
 
 // Creating
@@ -66,7 +68,8 @@ inline void SoftBody::take_arms() {
 void SoftBody::create_figure(const vec2& pos, int w, int h, float step) {
     this->pos = pos;
     this->w = w; this->h = h;
-    //points.clear();
+    points.clear();
+    points.reserve(w*h);
 
     for (int i=0; i<h; i++) {
         for (int j=0; j<w; j++) {
