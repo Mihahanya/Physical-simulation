@@ -1,0 +1,43 @@
+﻿  soft_iceberg.cpp
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(10,20): warning C4244: return: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(41,81): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(43,77): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(104,48): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(104,39): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(104,30): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(105,48): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(105,39): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(105,28): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(106,48): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(106,39): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(106,28): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(107,48): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(107,37): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(107,28): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(108,48): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(108,37): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(108,28): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(109,48): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(109,39): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\fs.h(109,30): warning C4244: аргумент: преобразование "float" в "sf::Uint8", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\PhysicalObject.h(34,22): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\Direct.h(70,10): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftBody.h(78,21): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftBody.h(79,21): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftContour.h(58,72): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\SoftContour.h(71,81): warning C4244: +=: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\Scene.h(19,19): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\Scene.h(89,17): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\Scene.h(89,7): warning C4244: инициализация: преобразование "double" в "const float", возможна потеря данных
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\physic_simulation\Scene.h(102,19): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\soft_iceberg\soft_iceberg.cpp(24,22): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\soft_iceberg\soft_iceberg.cpp(24,40): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\soft_iceberg\soft_iceberg.cpp(24,88): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\soft_iceberg\soft_iceberg.cpp(46,31): warning C4305: инициализация: усечение из "double" в "float"
+D:\PROJECTS\physic\Physical-simulation\physic_simulation\soft_iceberg\soft_iceberg.cpp(47,32): warning C4305: инициализация: усечение из "double" в "float"
+  Создание кода
+  0 of 620 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  soft_iceberg.vcxproj -> D:\PROJECTS\physic\Physical-simulation\physic_simulation\x64\Release\soft_iceberg.exe

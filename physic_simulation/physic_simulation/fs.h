@@ -1,6 +1,5 @@
 #pragma once
 
-#include "config.h"
 #include "Drawable.h"
 
 namespace vs
@@ -23,12 +22,31 @@ namespace vs
         return v / dist(vs::zero, v);
     }
 
+    inline float angle(const vec2& v1, const vec2& v2) {
+        return acos(dot(norm(v1), norm(v2)));
+    }
+
     inline vec2 reflect(const vec2& rd, const vec2& n) {
         return rd - n * 2.f * dot(n, rd);
     }
 
     inline vec2 rotate(const vec2& v, float a) {
         return { v.x * cos(a) - v.y * sin(a), v.x * sin(a) + v.y * cos(a) };
+    }
+
+    float polygon_area(const vector<vec2>& points) {
+        float area = 0;
+        for (int i=0; i<points.size(); ++i) {
+            if (i != points.size()-1)
+                area += (points[i].x*points[i+1].y - points[i].y*points[i+1].x) / 2.;
+            else 
+                area += (points[i].x*points[1].y - points[i].y*points[1].x) / 2.;
+        }
+        return area;
+    }
+
+    inline vec2 vec_mul(const vec2& v1, const vec2& v2) {
+        return vec2{v1.x*v2.x, v1.y*v2.y};
     }
 }
 
@@ -48,11 +66,11 @@ namespace ff
         window.draw(c);
     }
 
-    class FixedLine : public Drawable {
+    class FixedLine : public sfDrawable {
     public:
         vec2 *p1, *p2;
 
-        FixedLine(vec2 *p1, vec2 *p2, RenderWindow* window, Color col=Color::Black) : Drawable{col}, p1{p1}, p2{p2} {
+        FixedLine(vec2 *p1, vec2 *p2, RenderWindow* window, Color col=Color::Black) : sfDrawable{col}, p1{p1}, p2{p2} {
             set_window(window);
         }
 

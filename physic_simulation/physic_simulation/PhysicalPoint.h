@@ -7,7 +7,7 @@ class PhysicalPoint;
 
 using PPoint = PhysicalPoint;
 
-class PhysicalPoint : public PhysicalObject, public Drawable
+class PhysicalPoint : public PhysicalObject, public sfDrawable
 {
 public:
     bool is_collised = false;
@@ -42,13 +42,13 @@ private:
 // Constructors
 
 PhysicalPoint::PhysicalPoint() {
-    gravity_force = GRAVITY * mass;
+    gravity_force = GRAV * mass;
 }
 
 PhysicalPoint::PhysicalPoint(float mass, float bounciness, float friction, Color color=Color::Black) :
     PhysicalObject{mass, bounciness, friction}, Drawable{color} 
 {
-    gravity_force = GRAVITY * mass;
+    gravity_force = GRAV * mass;
 }
 
 PhysicalPoint::~PhysicalPoint() {}
@@ -58,7 +58,7 @@ PhysicalPoint::~PhysicalPoint() {}
 void PhysicalPoint::update(float delta_time) {
     if (is_static) return;
 
-    force = gravity_force + normal_force + friction_force + addf;
+    force = gravity_force + normal_force + addf;
 
     vel += force / mass * delta_time;
     
@@ -77,7 +77,7 @@ inline void PhysicalPoint::do_walls_collision() {
         const vec2 wall_normal = walls[i]->normal;
 
         /*Direct temp(prev_pos, pos);
-        vec2 dir = temp.direction == vs::zero ? -vs::norm(GRAVITY) : temp.direction;
+        vec2 dir = temp.direction == vs::zero ? -vs::norm(GRAV) : temp.direction;
         dir *= 2.f;
 
         vec2 cross; bool contact;
@@ -111,18 +111,19 @@ inline void PhysicalPoint::do_walls_collision() {
         if (is_collised) {
             const vec2 reflexed = vs::reflect(vel * bounciness, wall_normal);
 
-            //vel = reflexed;
-            if (vs::length(reflexed) > 50) vel = reflexed;
-            else vel = vs::zero;
+            vel = reflexed;
 
-            normal_force = wall_normal * vs::length(force-normal_force) * (1-friction);
+            //float ang = vs::angle(wall_normal, force) - PI/2;
+            //normal_force = wall_normal * vs::length(force-normal_force) * cos(ang) * 3.f;
+            //float depth = walls[i]->dist_to_vec(pos);
+            //normal_force = wall_normal * depth * vs::length(force-normal_force);
 
             if (i == 0) std::swap(walls[0], walls[1]);
             else if (i != 1) std::swap(walls[1], walls[i]);
 
             return;
         }
-        friction_force = normal_force = vs::zero;
+        normal_force = vs::zero;
     }
 }
 

@@ -1,11 +1,10 @@
 #pragma once
 
 #include "include.h"
-#include "Drawable.h"
 
 using vec2 = Vector2f;
 
-const vec2 GRAVITY {0, 1000};
+const vec2 GRAV {0, 1000};
 
 constexpr int W = 1050;
 constexpr int H = 800;

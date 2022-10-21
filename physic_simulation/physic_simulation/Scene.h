@@ -10,7 +10,7 @@ class Scene;
 
 void main_loop(auto, Scene&);
 
-class Scene : public Drawable {
+class Scene : public sfDrawable {
 public:
 	vector<SoftBody*> sbodys{};
 	vector<SoftContour*> contours{};
@@ -136,10 +136,11 @@ void main_loop(auto main, Scene& scene) {
 
 		scene.window->clear(scene.color);
 
+		scene.update();
+
 		main(); 
 
 		scene.draw();
-		scene.update();
 
 		scene.window->display();
 	}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "config.h"
+#include "include.h"
 
 class Direct
 {
@@ -12,9 +12,11 @@ public:
 
 	float y_by_x(float x) const;
 	float x_by_y(float y) const;
+	float dist_to_vec(const vec2&) const;
 
 	tuple<vec2, bool> cross(const Direct& dir) const;
-	
+	vec2 perpend_cross_from_v(const vec2&) const;
+
 	bool out_of_x(float x) const;
 	bool out_of_y(float y) const;
 	bool out_of_p(vec2 v) const;
@@ -55,6 +57,23 @@ inline float Direct::y_by_x(float x) const {
 inline float Direct::x_by_y(float y) const {
 	return -(b * y + c) / a;
 }
+
+inline float Direct::dist_to_vec(const vec2& m) const {
+	return abs(a*m.x + b*m.y + c) / sqrt(a*a + b*b);
+}
+
+inline vec2 Direct::perpend_cross_from_v(const vec2& p) const {
+	// WARNING: not ready!
+	float x1=p.x, y2=p.y, 
+		  y1=y_by_x(p.x), x2=x_by_y(p.y);
+
+	float k = ((p.x-x1) * (x2-x1) + (p.y-y1)*(y2-y1))/ (pow(x2-x1, 2) + pow(y2-y1, 2)),
+		  x = x1 + k * (x2-x1),
+		  y = y1 + k * (y2-y1);
+
+	return vec2{x, y};
+}
+
 
 tuple<vec2, bool> Direct::cross(const Direct& dir) const {
 	if (direction == dir.direction or dir.beg == dir.end) return { vs::zero, false };

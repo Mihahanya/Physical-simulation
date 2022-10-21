@@ -1,11 +1,12 @@
 ﻿#include <iostream>
 
+#include "config.h"
 #include "Scene.h"
 
 vector<PPoint> points_circle(int sides, float size, vec2 center) {
     vector<PPoint> points;
     for (float a=0; a<PI*2 and points.size()<sides; a+=PI/sides*2) {
-        PPoint p(100, 0.95, 0, HSVtoRGB(360*a/PI/2, 1, 1)); 
+        PPoint p(1, 0.5, 0, HSVtoRGB(360*a/PI/2, 1, 1)); 
         p.set_pos(center + vec2(cos(a), sin(a))*size);
         points.push_back(p);
     }
@@ -49,8 +50,8 @@ int main()
     //
     //scene.add(fig);
     
-    /*auto pnts = points_circle(2000, 150, center+vec2(15, -70));
-    for (PPoint &p : pnts) scene.add(p);*/
+    auto pnts = points_circle(2000, 150, center+vec2(15, -70));
+    for (PPoint &p : pnts) scene.add(p);
 
     /// add walls
 
